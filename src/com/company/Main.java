@@ -15,7 +15,7 @@ public class Main {
     public static void main(String[] args) {
 
         try {
-            BufferedReader in = new BufferedReader(new FileReader("RoutePPAdvant2.txt"));
+            BufferedReader in = new BufferedReader(new FileReader("resources/studenten_roostering.csv"));
             String str;
             str = in.readLine();
             while ((str = in.readLine()) != null) {
