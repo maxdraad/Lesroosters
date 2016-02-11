@@ -2,7 +2,7 @@ package com.company;
 
 public class Main {
 
-    public int classrooms = 7;
+    public int classrooms = 77;
 
     public static void main(String[] args) {
         System.out.println("Hello World");
