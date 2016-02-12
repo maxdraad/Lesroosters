@@ -9,6 +9,8 @@ public class Main {
     public int N_CLASSROOMS = 7;
     public int N_TIME_SLOTS = 5;
     public int N_DAYS = 5;
+    public int N_STUDENTS = 609;
+    public int N_SUBJECTS = 29;
 
 
 
