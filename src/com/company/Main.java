@@ -10,6 +10,9 @@ public class Main {
     public int N_TIME_SLOTS = 5;
     public int N_DAYS = 5;
 
+    //test
+    public int N_COURSES = 10;
+
 
 
     public static void main(String[] args) {
