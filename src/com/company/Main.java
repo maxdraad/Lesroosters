@@ -18,6 +18,7 @@ public class Main {
 
     public static void main(String[] args) {
 
+        // BufferedReader die het tekstbestand met Studentgegevens inleest
         try {
             BufferedReader in = new BufferedReader(new FileReader("resources/studenten_roostering.csv"));
             String str;
