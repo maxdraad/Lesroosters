@@ -24,7 +24,7 @@ public class Main {
             while ((str = in.readLine()) != null) {
                  dataList.add(str);
             }
-            System.out.println(dataList[2]);
+            System.out.println(dataList);
             in.close();
         } catch (IOException e) {
             System.out.println("File Read Error");
