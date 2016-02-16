@@ -16,7 +16,6 @@ public class Main {
     public int N_COURSES = 10;
 
 
-
     public static void main(String[] args) {
 
         try {
