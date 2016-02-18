@@ -30,9 +30,17 @@ public class Main {
 
             while ((str = csvStudentGegevens.readLine()) != null){
                 List<String> gegevens = Arrays.asList(str.split(","));
-               // Student stud1 = new Student(gegevens.get(0), gegevens.get(1), gegevens.get(2),
-               //         gegevens.get(3),gegevens.get(4),gegevens.get(5),gegevens.get(6),gegevens.get(7));
-
+                String lastName = gegevens.get(0);
+                String firstName = gegevens.get(1);
+                int studentNumber = Integer.parseInt(gegevens.get(2));
+                Student student = new Student(lastName, firstName, studentNumber);
+                String vak = gegevens.get(3);
+/*              for (Course course : courses) {
+                    if (course.getName() == vak) {
+                        student.addCourse(course);
+                        course.addStudent(student);
+                    }
+                }*/
              studentGegevens.add(gegevens);
 
             }
