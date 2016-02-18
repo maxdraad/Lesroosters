@@ -26,24 +26,26 @@ public class Main {
             String str;
             str = csvStudentGegevens.readLine();
 
-//            ArrayList<List<String>> studentGegevens = new ArrayList<>();
+           ArrayList<List<String>> studentGegevens = new ArrayList<>();
 
             while ((str = csvStudentGegevens.readLine()) != null){
-                Student stud1 = new Student("de vries","piet",10,"a","b","c","d","e");
-//                List<String> gegevens = Arrays.asList(str.split(","));
-//                studentGegevens.add(gegevens);
-                System.out.println(stud1);
+                List<String> gegevens = Arrays.asList(str.split(","));
+               // Student stud1 = new Student(gegevens.get(0), gegevens.get(1), gegevens.get(2),
+               //         gegevens.get(3),gegevens.get(4),gegevens.get(5),gegevens.get(6),gegevens.get(7));
+
+             studentGegevens.add(gegevens);
+
             }
-//            System.out.println( studentGegevens );
+            System.out.println(studentGegevens.get(1));
             csvStudentGegevens.close();
         } catch (IOException e) {
             System.out.println("File Read Error");
         }
 
-//        Student stud1 = new Student("de Vries", "Piet", 7);
+         Student test = new Student("de Vries", "Piet", 7);
         ArrayList<Student> students = new ArrayList<>();
 //        students.add(stud1);
-//        System.out.println(stud1);
+        System.out.println(test);
 
 
     }
