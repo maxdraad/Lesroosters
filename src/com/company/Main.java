@@ -48,5 +48,15 @@ public class Main {
         System.out.println(test);
 
 
+//      Aanmaken van de verschillende (beschikbare) lokalen. Mogelijkheid tot verbetering door dit
+//      te doen door middel van het inlezen van een bestand - mogelijkheid tot verandering van het programma.
+        Room room1 = new Room("A1.04", 41);
+        Room room2 = new Room("A1.06", 22);
+        Room room3 = new Room("A1.08", 20);
+        Room room4 = new Room("A1.10", 56);
+        Room room5 = new Room("B0.201", 48);
+        Room room6 = new Room("C0.110", 117);
+        Room room7 = new Room("C1.112", 60);
+
     }
 }
