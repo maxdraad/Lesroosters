@@ -38,7 +38,9 @@ public class Main {
         }
 
         System.out.println("Push test");
-        Student stud1 = new Student("Piet");
+        Student stud1 = new Student("Piet", 7);
+            ArrayList<Student> students = new ArrayList<>();
+            students.add(stud1);
             System.out.println(stud1);
     }
 }
