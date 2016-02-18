@@ -39,6 +39,6 @@ public class Main {
 
         System.out.println("Push test");
         Student stud1 = new Student("Piet");
-            System.out.println(stud1.name);
+            System.out.println(stud1);
     }
 }
