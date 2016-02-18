@@ -15,6 +15,8 @@ public class Main {
     public int N_STUDENTS = 609;
     public int N_SUBJECTS = 29;
 
+    public int i = 1;
+
         public static void main(String[] args) {
 
         // In dit gedeelte worden studentgegevens in een List in een ArrayList gezet
@@ -24,23 +26,25 @@ public class Main {
             String str;
             str = csvStudentGegevens.readLine();
 
-            ArrayList<List<String>> studentGegevens = new ArrayList<>();
+//            ArrayList<List<String>> studentGegevens = new ArrayList<>();
 
-            while ((str = csvStudentGegevens.readLine()) != null) {
-
-                List<String> gegevens = Arrays.asList(str.split(","));
-                studentGegevens.add(gegevens);
+            while ((str = csvStudentGegevens.readLine()) != null){
+                Student stud1 = new Student("de vries","piet",10,"a","b","c","d","e");
+//                List<String> gegevens = Arrays.asList(str.split(","));
+//                studentGegevens.add(gegevens);
+                System.out.println(stud1);
             }
-            System.out.println( studentGegevens.get(3) );
+//            System.out.println( studentGegevens );
             csvStudentGegevens.close();
         } catch (IOException e) {
             System.out.println("File Read Error");
         }
 
-        System.out.println("Push test");
-        Student stud1 = new Student("Piet", 7);
-            ArrayList<Student> students = new ArrayList<>();
-            students.add(stud1);
-            System.out.println(stud1);
+//        Student stud1 = new Student("de Vries", "Piet", 7);
+        ArrayList<Student> students = new ArrayList<>();
+//        students.add(stud1);
+//        System.out.println(stud1);
+
+
     }
 }
