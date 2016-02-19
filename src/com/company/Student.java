@@ -18,6 +18,5 @@ public class Student {
 
     public String toString() {
         return lastName+" "+firstName+" "+studentNumber;
-
     }
 }

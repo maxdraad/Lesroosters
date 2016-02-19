@@ -15,56 +15,79 @@ public class Main {
     public int N_STUDENTS = 609;
     public int N_SUBJECTS = 29;
 
-    public int i = 1;
+    public static void main(String[] args) {
 
-        public static void main(String[] args) {
+        ArrayList<Courses> courses = new ArrayList<>();
+        ArrayList<Room> rooms = new ArrayList<>();
+        ArrayList<Student> students = new ArrayList<>();
 
-        // In dit gedeelte worden studentgegevens in een List in een ArrayList gezet
-        // (dus een 2x2 tabel met studentgegevens)
+        try {
+            BufferedReader csvVakkenGegevens = new BufferedReader(new FileReader("resources/vakken_roostering.csv"));
+            String course;
+            course = csvVakkenGegevens.readLine();
+
+            while ((course = csvVakkenGegevens.readLine()) != null) {
+                List<String> gegevensVak = Arrays.asList(course.split(";"));
+                String name = gegevensVak.get(0);
+                int numberLectures = Integer.parseInt(gegevensVak.get(1));
+                int numberWorkgroups = Integer.parseInt(gegevensVak.get(2));
+                int maxStudentsGroups = Integer.parseInt(gegevensVak.get(3));
+                int numberPracticum = Integer.parseInt(gegevensVak.get(4));
+                int maxStudentsPracticum = Integer.parseInt(gegevensVak.get(5));
+
+                Courses newCourse = new Courses(name, numberLectures);
+                courses.add(newCourse);
+            }
+            csvVakkenGegevens.close();
+        } catch (IOException e) {
+            System.out.println("File Read Error Courses");
+        }
+
+        try {
+            BufferedReader csvZaalGegevens = new BufferedReader(new FileReader("resources/zalen_roostering.csv"));
+            String room;
+            room = csvZaalGegevens.readLine();
+
+            while ((room = csvZaalGegevens.readLine()) != null) {
+                List<String> gegevensZaal = Arrays.asList(room.split(";"));
+                String roomName = gegevensZaal.get(0);
+                int capacity = Integer.parseInt(gegevensZaal.get(1));
+
+                Room newRoom = new Room(roomName, capacity);
+                rooms.add(newRoom);
+            }
+
+        } catch (IOException e){
+            System.out.println("File Read Error Rooms");
+        }
+
         try {
             BufferedReader csvStudentGegevens = new BufferedReader(new FileReader("resources/studenten_roostering.csv"));
-            String str;
-            str = csvStudentGegevens.readLine();
+            String student;
+            student = csvStudentGegevens.readLine();
 
-           ArrayList<List<String>> studentGegevens = new ArrayList<>();
-
-            while ((str = csvStudentGegevens.readLine()) != null){
-                List<String> gegevens = Arrays.asList(str.split(","));
+            while ((student = csvStudentGegevens.readLine()) != null) {
+                List<String> gegevens = Arrays.asList(student.split(";"));
                 String lastName = gegevens.get(0);
                 String firstName = gegevens.get(1);
                 int studentNumber = Integer.parseInt(gegevens.get(2));
-                Student student = new Student(lastName, firstName, studentNumber);
+
+                Student newStudent = new Student(lastName, firstName, studentNumber);
+                students.add(newStudent);
+
                 String vak = gegevens.get(3);
-/*              for (Course course : courses) {
+        /*              for (Course course : courses) {
                     if (course.getName() == vak) {
                         student.addCourse(course);
                         course.addStudent(student);
                     }
                 }*/
-             studentGegevens.add(gegevens);
 
             }
-            System.out.println(studentGegevens.get(1));
             csvStudentGegevens.close();
         } catch (IOException e) {
-            System.out.println("File Read Error");
+            System.out.println("File Read Error Students");
         }
-
-         Student test = new Student("de Vries", "Piet", 7);
-        ArrayList<Student> students = new ArrayList<>();
-//        students.add(stud1);
-        System.out.println(test);
-
-
-//      Aanmaken van de verschillende (beschikbare) lokalen. Mogelijkheid tot verbetering door dit
-//      te doen door middel van het inlezen van een bestand - mogelijkheid tot verandering van het programma.
-        Room room1 = new Room("A1.04", 41);
-        Room room2 = new Room("A1.06", 22);
-        Room room3 = new Room("A1.08", 20);
-        Room room4 = new Room("A1.10", 56);
-        Room room5 = new Room("B0.201", 48);
-        Room room6 = new Room("C0.110", 117);
-        Room room7 = new Room("C1.112", 60);
 
     }
 }

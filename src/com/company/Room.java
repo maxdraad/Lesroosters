@@ -11,4 +11,8 @@ public class Room {
         this.name = name;
         this.capacity = capacity;
     }
+
+    public String toString() {
+        return name+" "+capacity;
+    }
 }
