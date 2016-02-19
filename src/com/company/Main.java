@@ -24,7 +24,7 @@ public class Main {
         try {
             BufferedReader csvVakkenGegevens = new BufferedReader(new FileReader("resources/vakken_roostering.csv"));
             String course;
-            course = csvVakkenGegevens.readLine();
+            csvVakkenGegevens.readLine();
 
             while ((course = csvVakkenGegevens.readLine()) != null) {
                 List<String> gegevensVak = Arrays.asList(course.split(";"));
@@ -46,7 +46,7 @@ public class Main {
         try {
             BufferedReader csvZaalGegevens = new BufferedReader(new FileReader("resources/zalen_roostering.csv"));
             String room;
-            room = csvZaalGegevens.readLine();
+            csvZaalGegevens.readLine();
 
             while ((room = csvZaalGegevens.readLine()) != null) {
                 List<String> gegevensZaal = Arrays.asList(room.split(";"));
@@ -64,7 +64,7 @@ public class Main {
         try {
             BufferedReader csvStudentGegevens = new BufferedReader(new FileReader("resources/studenten_roostering.csv"));
             String student;
-            student = csvStudentGegevens.readLine();
+            csvStudentGegevens.readLine();
 
             while ((student = csvStudentGegevens.readLine()) != null) {
                 List<String> gegevens = Arrays.asList(student.split(";"));
