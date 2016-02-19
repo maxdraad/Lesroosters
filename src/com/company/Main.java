@@ -72,20 +72,28 @@ public class Main {
                 String firstName = gegevens.get(1);
                 int studentNumber = Integer.parseInt(gegevens.get(2));
 
+                List<String> studentCourses;
+                studentCourses = gegevens.subList(3, gegevens.size());
                 //Maakt een lijst aan van de vakken die bij de student horen
-                if (gegevens.size() > 3){
-                    List<String> studentCourses = gegevens.subList(3, gegevens.size());
+
+                /*
+                List<String> studentCourses;
+                if (gegevens.size() >= 3){
+                    studentCourses = gegevens.subList(3, gegevens.size());
                     System.out.println(studentCourses);
                 }
                 else{
+                    studentCourses = [];
                     System.out.println("empty list");
                 }
+                */
 
 
-                Student newStudent = new Student(lastName, firstName, studentNumber);
+                Student newStudent = new Student(lastName, firstName, studentNumber, studentCourses);
                 students.add(newStudent);
+                System.out.println(student);
 
-                String vak = gegevens.get(3);
+              //  String vak = gegevens.get(3);
         /*              for (Course course : courses) {
                     if (course.getName() == vak) {
                         student.addCourse(course);
