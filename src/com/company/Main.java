@@ -72,6 +72,16 @@ public class Main {
                 String firstName = gegevens.get(1);
                 int studentNumber = Integer.parseInt(gegevens.get(2));
 
+                //Maakt een lijst aan van de vakken die bij de student horen
+                if (gegevens.size() > 3){
+                    List<String> studentCourses = gegevens.subList(3, gegevens.size());
+                    System.out.println(studentCourses);
+                }
+                else{
+                    System.out.println("empty list");
+                }
+
+
                 Student newStudent = new Student(lastName, firstName, studentNumber);
                 students.add(newStudent);
 
