@@ -1,11 +1,11 @@
 Achternaam;Voornaam;Stud.Nr.;Vak1;Vak2;Vak3;Vak4;Vak5;
-Abbing;Yanick;52311353;Analysemethoden en -technieken;Data Mining;Lineaire Algebra;Software engineering;
-Adam;Roelof;76903244;Webprogrammeren en databases;
-Agema;Willibrordus;6709529;Calculus 2;
-Anker;Servaas;70015932;Architectuur en computerorganisatie;Software engineering;
-Ankone;Wissal;82066165;Compilerbouw practicum;Project Genetic Algorithms;
-Apeldoorn;Herman;1886996;Advanced Heuristics;Heuristieken 2;
-Appel;Evi;13534377;Collectieve Intelligentie;
+Abbing;Yanick;52311353;Analysemethoden en -technieken;Data Mining;Lineaire Algebra;Software engineering;;
+Adam;Roelof;76903244;Webprogrammeren en databases;;;;;
+Agema;Willibrordus;6709529;Calculus 2;;;;;
+Anker;Servaas;70015932;Architectuur en computerorganisatie;Software engineering;;;;
+Ankone;Wissal;82066165;Compilerbouw practicum;Project Genetic Algorithms;;;;
+Apeldoorn;Herman;1886996;Advanced Heuristics;Heuristieken 2;;;;
+Appel;Evi;13534377;Collectieve Intelligentie;;;;;
 Appelhof;Wilmer;54395877;Programmeren in Java 2;;;;;
 Arendse;Benjamin;53512831;Webprogrammeren en databases;;;;;
 Aslan;Diny;56348773;Calculus 2;;;;;
@@ -608,4 +608,3 @@ Zondag;Malte;14847953;Advanced Heuristics;Interactie-ontwerp;Webprogrammeren en 
 Zonneveld;Marise;98780382;Data Mining;;;;;
 Zwarts;Chico;59289233;Architectuur en computerorganisatie;;;;;
 Zweekhorst;Stein;21311067;Lineaire Algebra;;;;;
-Student;Zondervak;0;;;;;;

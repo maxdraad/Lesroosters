@@ -17,10 +17,12 @@ public class Main {
 
     public static void main(String[] args) {
 
+        // ArrayList to keep al courses, rooms and students and their information
         ArrayList<Courses> courses = new ArrayList<>();
         ArrayList<Room> rooms = new ArrayList<>();
         ArrayList<Student> students = new ArrayList<>();
 
+        // Read in all courses and define their features
         try {
             BufferedReader csvVakkenGegevens = new BufferedReader(new FileReader("resources/vakken_roostering.csv"));
             String course;
@@ -35,7 +37,7 @@ public class Main {
                 int numberPracticum = Integer.parseInt(gegevensVak.get(4));
                 int maxStudentsPracticum = Integer.parseInt(gegevensVak.get(5));
 
-                Courses newCourse = new Courses(name, numberLectures);
+                Courses newCourse = new Courses(name, numberLectures, null);
                 courses.add(newCourse);
             }
             csvVakkenGegevens.close();
@@ -43,6 +45,7 @@ public class Main {
             System.out.println("File Read Error Courses");
         }
 
+        // Read in all lecture rooms and their capacity
         try {
             BufferedReader csvZaalGegevens = new BufferedReader(new FileReader("resources/zalen_roostering.csv"));
             String room;
@@ -61,6 +64,7 @@ public class Main {
             System.out.println("File Read Error Rooms");
         }
 
+        // Read in all students and define their features
         try {
             BufferedReader csvStudentGegevens = new BufferedReader(new FileReader("resources/studenten_roostering.csv"));
             String student;
@@ -88,10 +92,20 @@ public class Main {
                 }
                 */
 
+                // Voegt student toe aan course
+                /*
+                for (int i = 0; i < courses.size(); i++){
+                    Courses course = courses.get(i);
+                    if (studentCourses.contains(course)){
+
+                        }
+                    }
+                }
+                */
+
 
                 Student newStudent = new Student(lastName, firstName, studentNumber, studentCourses);
                 students.add(newStudent);
-                System.out.println(student);
 
               //  String vak = gegevens.get(3);
         /*              for (Course course : courses) {
@@ -106,6 +120,24 @@ public class Main {
         } catch (IOException e) {
             System.out.println("File Read Error Students");
         }
+
+
+
+
+        // Studenten tellen voor een bepaald vak - test
+        int studentenModerneDatabases = 0;
+
+        for(int i = 0; i < students.size(); i++){
+            Student student = students.get(i);
+            if (student.studentCourses.contains("Moderne Databases")){
+                studentenModerneDatabases += 1;
+            }
+            System.out.println(student);
+        }
+
+        System.out.println(studentenModerneDatabases); // Dit geeft al het goede aantal studenten voor dit vak
+
+        // ------------------------------------------------
 
     }
 }
