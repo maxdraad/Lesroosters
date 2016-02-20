@@ -95,17 +95,13 @@ public class Main {
 
                 // Voegt student toe aan course
 
-
                 for (int i = 0; i < courses.size(); i++){
                     Courses course = courses.get(i);
-                    if (studentCourses.contains(course)){
-                            course.courseStudents.add(studentNumber);   // Somehow werkt dit nog niet goed
-                            System.out.println(course);
+                    //System.out.println(course);
+                    if (studentCourses.contains(course.name)) {
+                        course.courseStudents.add(studentNumber);
                     }
-                    System.out.println(course.courseStudents.size());
                 }
-
-
 
                 Student newStudent = new Student(lastName, firstName, studentNumber, studentCourses);
                 students.add(newStudent);
@@ -124,7 +120,10 @@ public class Main {
             System.out.println("File Read Error Students");
         }
 
-
+        for(int i = 0; i < courses.size(); i++){
+            Courses course = courses.get(i);
+            System.out.println(course.name+" "+course.courseStudents.size());
+        }
 
 
         // Studenten tellen voor een bepaald vak - test
