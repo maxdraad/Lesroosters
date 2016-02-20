@@ -99,7 +99,7 @@ public class Main {
                 for (int i = 0; i < courses.size(); i++){
                     Courses course = courses.get(i);
                     if (studentCourses.contains(course)){
-                            course.courseStudents.add(studentNumber);
+                            course.courseStudents.add(studentNumber);   // Somehow werkt dit nog niet goed
                             System.out.println(course);
                     }
                     System.out.println(course.courseStudents.size());
