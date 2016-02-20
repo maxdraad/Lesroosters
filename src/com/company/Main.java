@@ -3,9 +3,7 @@ package com.company;
 import java.io.BufferedReader;
 import java.io.FileReader;
 import java.io.IOException;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
+import java.util.*;
 
 public class Main {
 
@@ -37,9 +35,12 @@ public class Main {
                 int numberPracticum = Integer.parseInt(gegevensVak.get(4));
                 int maxStudentsPracticum = Integer.parseInt(gegevensVak.get(5));
 
-                Courses newCourse = new Courses(name, numberLectures, null);
+                List<Integer> courseStudents = new ArrayList<Integer>();
+
+                Courses newCourse = new Courses(name, numberLectures, courseStudents);
                 courses.add(newCourse);
             }
+            System.out.println(courses);
             csvVakkenGegevens.close();
         } catch (IOException e) {
             System.out.println("File Read Error Courses");
@@ -93,15 +94,17 @@ public class Main {
                 */
 
                 // Voegt student toe aan course
-                /*
+
+
                 for (int i = 0; i < courses.size(); i++){
                     Courses course = courses.get(i);
                     if (studentCourses.contains(course)){
-
-                        }
+                            course.courseStudents.add(studentNumber);
+                            System.out.println(course);
                     }
+                    System.out.println(course.courseStudents.size());
                 }
-                */
+
 
 
                 Student newStudent = new Student(lastName, firstName, studentNumber, studentCourses);
@@ -132,7 +135,7 @@ public class Main {
             if (student.studentCourses.contains("Moderne Databases")){
                 studentenModerneDatabases += 1;
             }
-            System.out.println(student);
+        //    System.out.println(student);
         }
 
         System.out.println(studentenModerneDatabases); // Dit geeft al het goede aantal studenten voor dit vak

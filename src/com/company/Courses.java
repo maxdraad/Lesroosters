@@ -8,16 +8,16 @@ import java.util.List;
 public class Courses {
     public String name;
     public int numberLectures;
-    public List<String> courseStudents;
+    public List<Integer> courseStudents;
 
 
-    public Courses(String name, int numberLectures, List<String> courseStudents){
+    public Courses(String name, int numberLectures, List<Integer> courseStudents){
         this.name = name;
         this.numberLectures = numberLectures;
         this.courseStudents = courseStudents;
     }
 
     public String toString() {
-        return name+" "+numberLectures;
+        return name+" "+numberLectures+" "+courseStudents;
     }
 }
