@@ -40,7 +40,6 @@ public class Main {
                 Courses newCourse = new Courses(name, numberLectures, courseStudents);
                 courses.add(newCourse);
             }
-            System.out.println(courses);
             csvVakkenGegevens.close();
         } catch (IOException e) {
             System.out.println("File Read Error Courses");
