@@ -124,22 +124,5 @@ public class Main {
             Courses course = courses.get(i);
             System.out.println(course.name+" "+course.courseStudents.size());
         }
-
-
-        // Studenten tellen voor een bepaald vak - test
-        int studentenModerneDatabases = 0;
-
-        for(int i = 0; i < students.size(); i++){
-            Student student = students.get(i);
-            if (student.studentCourses.contains("Moderne Databases")){
-                studentenModerneDatabases += 1;
-            }
-        //    System.out.println(student);
-        }
-
-        System.out.println(studentenModerneDatabases); // Dit geeft al het goede aantal studenten voor dit vak
-
-        // ------------------------------------------------
-
     }
 }
