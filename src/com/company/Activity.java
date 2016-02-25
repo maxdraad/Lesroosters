@@ -2,10 +2,7 @@ package com.company;
 
 import java.util.List;
 
-/**
- * Created by Max on 18-2-2016.
- */
-public class Activities {
+public class Activity {
 
     public String course;
     public String type;
@@ -13,7 +10,7 @@ public class Activities {
     public List<String> studentGroup;
 
 
-    public Activities(String course, String type, int groupNumber, List<String> studentGroup ){
+    public Activity(String course, String type, int groupNumber, List<String> studentGroup ){
         this.type = type;
         this.course = course;
         this.groupNumber = groupNumber;

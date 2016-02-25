@@ -10,7 +10,7 @@ public class Main {
     public static void main(String[] args) {
 
         // ArrayList to keep al courses, rooms and students and their information
-        ArrayList<Courses> courses = new ArrayList<>();
+        ArrayList<Course> courses = new ArrayList<>();
         ArrayList<Room> rooms = new ArrayList<>();
         ArrayList<Student> students = new ArrayList<>();
 
@@ -31,13 +31,13 @@ public class Main {
 
                 List<Integer> courseStudents = new ArrayList<Integer>();
 
-                Courses newCourse = new Courses(name, numberLectures, courseStudents);
+                Course newCourse = new Course(name, numberLectures, courseStudents);
                 courses.add(newCourse);
             }
             csvVakkenGegevens.close();
 
         } catch (IOException e) {
-            System.out.println("File Read Error Courses");
+            System.out.println("File Read Error Course");
         }
 
         // Read in all lecture rooms and their capacity
@@ -72,12 +72,12 @@ public class Main {
                 int studentNumber = Integer.parseInt(gegevens.get(2));
 
 
-                //Instantiation of variable with list of Courses belonging to student
+                //Instantiation of variable with list of Course belonging to student
                 List<String> studentCourses = gegevens.subList(3, gegevens.size());
 
                 // Voegt student toe aan course
                 for (int i = 0; i < courses.size(); i++){
-                    Courses course = courses.get(i);
+                    Course course = courses.get(i);
                     if (studentCourses.contains(course.name)) {
                         course.courseStudents.add(studentNumber);
                     }
@@ -92,10 +92,10 @@ public class Main {
         }
 
         for(int i = 0; i < courses.size(); i++){
-            Courses course = courses.get(i);
+            Course course = courses.get(i);
             System.out.println(course.name+" "+course.courseStudents.size());
         }
-        Courses course = courses.get(3);
+        Course course = courses.get(3);
         System.out.println(course.name);
 
 

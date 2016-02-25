@@ -2,9 +2,6 @@ package com.company;
 
 import java.util.List;
 
-/**
- * Created by Max on 18-2-2016.
- */
 public class Student {
     public String lastName;
     public String firstName;
