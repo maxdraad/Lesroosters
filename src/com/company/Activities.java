@@ -13,11 +13,11 @@ public class Activities {
     public List<String> studentGroup;
 
 
-    public Group(String course, String type, int groupNumber, List<String> studentGroup ){
+    public Activities(String course, String type, int groupNumber, List<String> studentGroup ){
         this.type = type;
         this.course = course;
         this.groupNumber = groupNumber;
-        this.studentGroup = studentGroup
+        this.studentGroup = studentGroup;
     }
 
 }
