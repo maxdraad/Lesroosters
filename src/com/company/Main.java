@@ -7,12 +7,6 @@ import java.util.*;
 
 public class Main {
 
-    public int N_CLASSROOMS = 7;
-    public int N_TIME_SLOTS = 5;
-    public int N_DAYS = 5;
-    public int N_STUDENTS = 609;
-    public int N_SUBJECTS = 29;
-
     public static void main(String[] args) {
 
         // ArrayList to keep al courses, rooms and students and their information
@@ -41,6 +35,7 @@ public class Main {
                 courses.add(newCourse);
             }
             csvVakkenGegevens.close();
+
         } catch (IOException e) {
             System.out.println("File Read Error Courses");
         }
