@@ -5,4 +5,16 @@ package com.company;
  */
 public class Activities {
 
+    public class Hoorcollege {
+
+    }
+
+    public class Werkcollege {
+
+    }
+
+    public class Practicum {
+
+    }
+
 }

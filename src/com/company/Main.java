@@ -76,42 +76,19 @@ public class Main {
                 String firstName = gegevens.get(1);
                 int studentNumber = Integer.parseInt(gegevens.get(2));
 
-                List<String> studentCourses;
-                studentCourses = gegevens.subList(3, gegevens.size());
-                //Maakt een lijst aan van de vakken die bij de student horen
 
-                /*
-                List<String> studentCourses;
-                if (gegevens.size() >= 3){
-                    studentCourses = gegevens.subList(3, gegevens.size());
-                    System.out.println(studentCourses);
-                }
-                else{
-                    studentCourses = [];
-                    System.out.println("empty list");
-                }
-                */
+                //Instantiation of variable with list of Courses belonging to student
+                List<String> studentCourses = gegevens.subList(3, gegevens.size());
 
                 // Voegt student toe aan course
-
                 for (int i = 0; i < courses.size(); i++){
                     Courses course = courses.get(i);
-                    //System.out.println(course);
                     if (studentCourses.contains(course.name)) {
                         course.courseStudents.add(studentNumber);
                     }
                 }
-
                 Student newStudent = new Student(lastName, firstName, studentNumber, studentCourses);
                 students.add(newStudent);
-
-              //  String vak = gegevens.get(3);
-        /*              for (Course course : courses) {
-                    if (course.getName() == vak) {
-                        student.addCourse(course);
-                        course.addStudent(student);
-                    }
-                }*/
 
             }
             csvStudentGegevens.close();
@@ -123,5 +100,8 @@ public class Main {
             Courses course = courses.get(i);
             System.out.println(course.name+" "+course.courseStudents.size());
         }
+        Courses course = courses.get(3);
+        System.out.println(course.name);
+
     }
 }
