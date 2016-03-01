@@ -97,13 +97,16 @@ public class Main {
             System.out.println("File Read Error Students");
         }
 
-        //Test Prints
+        //Test Prints. Herkent ook of er meerdere werkgroepen nodig zijn!!
         for(int i = 0; i < courses.size(); i++){
             Course course = courses.get(i);
             System.out.println(course.name+" "+course.courseStudents.size());
             if (course.courseStudents.size() > course.maxStudentsGroups && course.numberWorkGroups > 0){
+
+                int numberGroups = (int) Math.ceil(((double) course.courseStudents.size())/((double) course.maxStudentsGroups));
                 System.out.println(ANSI_RED +
-                        " Meerdere werkgroepen nodig: Max Werkgroep="+course.maxStudentsGroups+ANSI_RESET);
+                        numberGroups + " werkgroepen nodig (Capaciteit Werkgroep = "+course.maxStudentsGroups+ANSI_RESET+")");
+
             }
             if
                     (course.courseStudents.size() > course.maxStudentsPracticum && course.numberPracticum > 0){
