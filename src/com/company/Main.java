@@ -10,9 +10,9 @@ public class Main {
     public static void main(String[] args) {
 
         // ArrayList to keep al courses, rooms and students and their information
-        ArrayList<Course> courses = new ArrayList<>();
-        ArrayList<Room> rooms = new ArrayList<>();
-        ArrayList<Student> students = new ArrayList<>();
+        List<Course> courses = new ArrayList<>();
+        List<Room> rooms = new ArrayList<>();
+        List<Student> students = new ArrayList<>();
 
         // Read in all courses and define their features
         try {
