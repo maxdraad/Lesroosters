@@ -7,10 +7,12 @@ import java.util.*;
 
 
 public class Main {
+
     //Om printout tekst in kleur te krijgen
     public static final String ANSI_RED = "\u001B[31m";
     //En weer zwart te maken
     public static final String ANSI_RESET = "\u001B[0m";
+
 
     public static void main(String[] args) {
 
@@ -18,6 +20,8 @@ public class Main {
         List<Course> courses = new ArrayList<>();
         List<Room> rooms = new ArrayList<>();
         List<Student> students = new ArrayList<>();
+        List<Activity> activities = new ArrayList<>();
+
 
         // Read in all courses and define their features
         try {
@@ -102,23 +106,33 @@ public class Main {
             Course course = courses.get(i);
             System.out.println(course.name+" "+course.courseStudents.size());
             if (course.courseStudents.size() > course.maxStudentsGroups && course.numberWorkGroups > 0){
-
                 int numberGroups = (int) Math.ceil(((double) course.courseStudents.size())/((double) course.maxStudentsGroups));
-                System.out.println(ANSI_RED +
-                        numberGroups + " werkgroepen nodig (Capaciteit Werkgroep = "+course.maxStudentsGroups+ANSI_RESET+")");
+                System.out.println(ANSI_RED + numberGroups + " werkgroepen nodig (Capaciteit Werkgroep = "
+                         + course.maxStudentsGroups+ANSI_RESET+")");
 
             }
-            if
-                    (course.courseStudents.size() > course.maxStudentsPracticum && course.numberPracticum > 0){
-                System.out.println(ANSI_RED +
-                        " Meerdere practicumgroepen nodig: Capaciteit Practicumgroep="+course.maxStudentsPracticum+ANSI_RESET);
+            if  (course.courseStudents.size() > course.maxStudentsPracticum && course.numberPracticum > 0){
+
+                int numberPracticumGroups = (int) Math.ceil(((double) course.courseStudents.size())/((double) course.maxStudentsPracticum));
+                System.out.println(ANSI_RED + numberPracticumGroups +
+                        " practicumgroepen nodig (Capaciteit Practicumgroep=" + course.maxStudentsPracticum+ANSI_RESET+")");
             }
-
-
         }
-        Course course = courses.get(3);
-        System.out.println(course.name);
 
+
+
+
+        //For loop die activities aanmaakt
+        //Hier zouden we de eerste heuristieken kunnen toepassen
+
+        for(int i = 0; i < courses.size(); i++){
+            Course course = courses.get(i);
+            if (course.numberLectures > 0) {
+                Activity hoorcollege = new Activity(course.name, "Hoorcollege", course.numberLectures, 1, course.courseStudents);
+                activities.add(hoorcollege);
+            }
+        }
+        System.out.println("Aantal Activities: " + activities.size());
 
 
 

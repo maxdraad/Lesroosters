@@ -5,14 +5,16 @@ import java.util.List;
 public class Activity {
 
     public String course;
-    public String type;
+    public String activity;
+    public int occurrences;
     public int groupNumber;
-    public List<String> studentGroup;
+    public List<Integer> studentGroup;
 
 
-    public Activity(String course, String type, int groupNumber, List<String> studentGroup ){
-        this.type = type;
+    public Activity(String course, String activity, int occurrences, int groupNumber, List<Integer> studentGroup ){
         this.course = course;
+        this.activity = activity;
+        this.occurrences = occurrences;
         this.groupNumber = groupNumber;
         this.studentGroup = studentGroup;
     }
