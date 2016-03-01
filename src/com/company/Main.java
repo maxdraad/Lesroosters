@@ -100,12 +100,15 @@ public class Main {
         //Test Prints
         for(int i = 0; i < courses.size(); i++){
             Course course = courses.get(i);
+            System.out.println(course.name+" "+course.courseStudents.size());
             if (course.courseStudents.size() > course.maxStudentsGroups && course.numberWorkGroups > 0){
-                System.out.println(course.name+" "+course.courseStudents.size()+ ANSI_RED +
+                System.out.println(ANSI_RED +
                         " Meerdere werkgroepen nodig: Max Werkgroep="+course.maxStudentsGroups+ANSI_RESET);
             }
-            else{
-                System.out.println(course.name+" "+course.courseStudents.size());
+            if
+                    (course.courseStudents.size() > course.maxStudentsPracticum && course.numberPracticum > 0){
+                System.out.println(ANSI_RED +
+                        " Meerdere practicumgroepen nodig: Capaciteit Practicumgroep="+course.maxStudentsPracticum+ANSI_RESET);
             }
 
 
