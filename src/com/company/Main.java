@@ -5,7 +5,12 @@ import java.io.FileReader;
 import java.io.IOException;
 import java.util.*;
 
+
 public class Main {
+    //Om printout tekst in kleur te krijgen
+    public static final String ANSI_RED = "\u001B[31m";
+    //En weer zwart te maken
+    public static final String ANSI_RESET = "\u001B[0m";
 
     public static void main(String[] args) {
 
@@ -92,10 +97,12 @@ public class Main {
             System.out.println("File Read Error Students");
         }
 
+        //Test Prints
         for(int i = 0; i < courses.size(); i++){
             Course course = courses.get(i);
             if (course.courseStudents.size() > course.maxStudentsGroups && course.numberWorkGroups > 0){
-                System.out.println(course.name+" "+course.courseStudents.size()+" Meerdere werkgroepen nodig: Max Werkgroep="+course.maxStudentsGroups);
+                System.out.println(course.name+" "+course.courseStudents.size()+ ANSI_RED +
+                        " Meerdere werkgroepen nodig: Max Werkgroep="+course.maxStudentsGroups+ANSI_RESET);
             }
             else{
                 System.out.println(course.name+" "+course.courseStudents.size());
