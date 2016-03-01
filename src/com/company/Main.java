@@ -31,12 +31,12 @@ public class Main {
 
                 List<Integer> courseStudents = new ArrayList<Integer>();
 
-                Course newCourse = new Course(name, numberLectures, courseStudents);
+                Course newCourse = new Course(name, numberLectures, numberWorkgroups, maxStudentsGroups, numberPracticum, maxStudentsPracticum, courseStudents);
                 courses.add(newCourse);
             }
             csvVakkenGegevens.close();
-
-        } catch (IOException e) {
+        }
+        catch (IOException e) {
             System.out.println("File Read Error Course");
         }
 
@@ -55,7 +55,8 @@ public class Main {
                 rooms.add(newRoom);
             }
 
-        } catch (IOException e){
+        }
+        catch (IOException e){
             System.out.println("File Read Error Rooms");
         }
 
@@ -93,7 +94,14 @@ public class Main {
 
         for(int i = 0; i < courses.size(); i++){
             Course course = courses.get(i);
-            System.out.println(course.name+" "+course.courseStudents.size());
+            if (course.courseStudents.size() > course.maxStudentsGroups && course.numberWorkGroups > 0){
+                System.out.println(course.name+" "+course.courseStudents.size()+" Meerdere werkgroepen nodig: Max Werkgroep="+course.maxStudentsGroups);
+            }
+            else{
+                System.out.println(course.name+" "+course.courseStudents.size());
+            }
+
+
         }
         Course course = courses.get(3);
         System.out.println(course.name);
