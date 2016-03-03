@@ -131,10 +131,23 @@ public class Main {
                 Activity hoorcollege = new Activity(course.name, "Hoorcollege", course.numberLectures, 1, course.courseStudents);
                 activities.add(hoorcollege);
             }
-            //if (course.numberWorkGroups > 0) {
-            //    Activity werkgroep = new Activity(course.name, "Werkgroep", course.numberLectures,);
-            //}
-        }
+            if (course.numberWorkGroups > 0) {
+                if (course.courseStudents.size() > course.maxStudentsGroups){
+                    int numberGroups = (int) Math.ceil(((double) course.courseStudents.size())/((double) course.maxStudentsGroups));
+                    int listRemainder;
+                    for (int i = 1; i < numberGroups; i++){
+
+                        //Activity werkgroep = new Activity(course.name, "Werkgroep", course.numberLectures, i, deel);
+                    }
+                    //makelist remiander
+
+                }
+                else {
+                    Activity werkgroep = new Activity(course.name, "Werkgroep", course.numberLectures, 1, course.courseStudents);
+                }
+            }
+            }
+
         for(int i = 0; i < activities.size();i++) {
             System.out.println(activities.get(i));
         }
