@@ -19,4 +19,8 @@ public class Activity {
         this.studentGroup = studentGroup;
     }
 
+    public String toString() {
+        return course+" "+activity+" "+occurrences+" "+groupNumber+" "+studentGroup;
+    }
+
 }

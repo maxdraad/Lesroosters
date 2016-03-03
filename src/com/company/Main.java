@@ -131,6 +131,12 @@ public class Main {
                 Activity hoorcollege = new Activity(course.name, "Hoorcollege", course.numberLectures, 1, course.courseStudents);
                 activities.add(hoorcollege);
             }
+            //if (course.numberWorkGroups > 0) {
+            //    Activity werkgroep = new Activity(course.name, "Werkgroep", course.numberLectures,);
+            //}
+        }
+        for(int i = 0; i < activities.size();i++) {
+            System.out.println(activities.get(i));
         }
         System.out.println("Aantal Activities: " + activities.size());
 
