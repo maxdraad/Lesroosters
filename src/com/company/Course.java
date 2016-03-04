@@ -12,7 +12,7 @@ public class Course {
     public List<Integer> courseStudents;
 
 
-    public Course(String name, int numberLectures, int numberWorkGroups, int maxStudentsGroups, int numberPracticum, int maxStudentsPracticum, List courseStudents){
+    public Course(String name, int numberLectures, int numberWorkGroups, int maxStudentsGroups, int numberPracticum, int maxStudentsPracticum, List<Integer> courseStudents){
         this.name = name;
         this.numberLectures = numberLectures;
         this.courseStudents = courseStudents;

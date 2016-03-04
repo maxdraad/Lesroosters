@@ -135,11 +135,17 @@ public class Main {
                 if (course.courseStudents.size() > course.maxStudentsGroups){
                     int numberGroups = (int) Math.ceil(((double) course.courseStudents.size())/((double) course.maxStudentsGroups));
                     int listRemainder;
-                    for (int i = 1; i < numberGroups; i++){
-
-                        //Activity werkgroep = new Activity(course.name, "Werkgroep", course.numberLectures, i, deel);
+                    for (int j = 1; j < numberGroups; j++){
+                        List<Integer> studentsWorkGroup = course.courseStudents.subList((j-1)*course.maxStudentsGroups, j*course.maxStudentsGroups-1);
+                        Activity workGroup = new Activity(course.name, "Werkgroep", course.numberLectures, j, studentsWorkGroup );
+                        activities.add(workGroup);
                     }
                     //makelist remiander
+
+                    int lastStudent = ((course.numberWorkGroups -1)*course.maxStudentsGroups );
+                    List studentsWorkGroup = course.courseStudents.subList(lastStudent, course.courseStudents.size() );
+                    Activity workGroup = new Activity(course.name, "Werkgroep", course.numberLectures, course.numberWorkGroups, studentsWorkGroup);
+                    activities.add(workGroup);
 
                 }
                 else {

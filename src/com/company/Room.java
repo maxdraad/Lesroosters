@@ -5,7 +5,7 @@ public class Room {
     public int capacity;
 
     public Room(String name, int capacity){
-        this.name = name;
+            this.name = name;
         this.capacity = capacity;
     }
 
