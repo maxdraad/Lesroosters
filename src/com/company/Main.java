@@ -146,8 +146,7 @@ public class Main {
                         Activity workGroup = new Activity(course.name, "Werkgroep", course.numberWorkGroups, j, studentsWorkGroup);
                         activities.add(workGroup);
                     }
-                    int lastStudent = ((course.numberWorkGroups - 1) * course.maxStudentsGroups);
-                    List studentsWorkGroup = course.courseStudents.subList(lastStudent, course.courseStudents.size());
+                    List studentsWorkGroup = course.courseStudents.subList(course.maxStudentsGroups*(j-1), course.courseStudents.size());
                     Activity workGroup = new Activity(course.name, "Werkgroep", course.numberWorkGroups, j, studentsWorkGroup);
                     activities.add(workGroup);
 
@@ -159,6 +158,7 @@ public class Main {
                 }
             }
 
+            // Algoritme om practicumgroepen aan te maken
             if (course.numberPracticum > 0) {
 
                     // Verdeelt studenten over practicumgroepen als er meer studenten zijn dan capaciteit van 1 werkgroep
@@ -167,13 +167,11 @@ public class Main {
                     int j;
 
                     for (j = 1; j < numberGroups; j++){
-                        List<Integer> studentsPracticumGroup = course.courseStudents.subList(((j-1)*course.maxStudentsPracticum)+1, j*course.maxStudentsPracticum);
+                        List<Integer> studentsPracticumGroup = course.courseStudents.subList(((j-1)*course.maxStudentsPracticum), j*course.maxStudentsPracticum);
                         Activity workGroup = new Activity(course.name, "Practicum", course.numberPracticum, j, studentsPracticumGroup );
                         activities.add(workGroup);
                     }
-
-                    int lastStudent = ((course.numberPracticum -1)*course.maxStudentsPracticum );
-                    List studentsWorkGroup = course.courseStudents.subList(lastStudent, course.courseStudents.size() );
+                    List studentsWorkGroup = course.courseStudents.subList(course.maxStudentsPracticum*(j-1), course.courseStudents.size());
                     Activity workGroup = new Activity(course.name, "Practicum", course.numberPracticum, j, studentsWorkGroup);
                     activities.add(workGroup);
                 }
