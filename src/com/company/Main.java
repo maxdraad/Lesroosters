@@ -190,12 +190,13 @@ public class Main {
             }
         }
 
-
+        //Print alle Activities met bijbehorende studentnummers van studenten
         for(int i = 0; i < activities.size() ; i++) {
+
+            //Stukje code die studentNumber uit lijst van Student extraheert
             List studentList = activities.get(i).studentGroup;
             List<Integer> studentNumberList = new ArrayList<Integer>();
             int studentNumber;
-
             for (int x = 0; x < studentList.size() ; x++){
 
                 Student thisStudent = (Student) studentList.get(x);
