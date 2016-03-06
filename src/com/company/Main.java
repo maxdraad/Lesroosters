@@ -123,7 +123,7 @@ public class Main {
                     int numberGroups = (int) Math.ceil(((double) course.courseStudents.size()) / ((double) course.maxStudentsGroups));
                     int j;
                     for (j = 1; j < numberGroups; j++) {
-                        List<Student> studentsWorkGroup = course.courseStudents.subList((j - 1) * course.maxStudentsGroups, j * course.maxStudentsGroups - 1);
+                        List<Student> studentsWorkGroup = course.courseStudents.subList((j - 1) * course.maxStudentsGroups, j * course.maxStudentsGroups );
                         Activity workGroup = new Activity(course, "Werkgroep", course.numberWorkGroups, j, studentsWorkGroup);
                         activities.add(workGroup);
                     }
@@ -183,7 +183,7 @@ public class Main {
             }
 
             System.out.println(activities.get(i).course.name + " | Aantal " + activities.get(i).activity + ": " +
-                    activities.get(i).occurrences + " | Groep: " + activities.get(i).groupNumber + " | Studentnummers: " +
+                    activities.get(i).occurrences + " | Groep: " + activities.get(i).groupNumber + " | Aantal studenten: " + activities.get(i).studentGroup.size() + " | Studentnummers: " +
                     studentNumberList);
         }
         System.out.println("Aantal Activities: " + activities.size());
