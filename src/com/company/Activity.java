@@ -4,14 +4,14 @@ import java.util.List;
 
 public class Activity {
 
-    public String course;
+    public Course course;
     public String activity;
     public int occurrences;
     public int groupNumber;
     public List<Student> studentGroup;
 
 
-    public Activity(String course, String activity, int occurrences, int groupNumber, List<Student> studentGroup ){
+    public Activity(Course course, String activity, int occurrences, int groupNumber, List<Student> studentGroup ){
         this.course = course;
         this.activity = activity;
         this.occurrences = occurrences;
