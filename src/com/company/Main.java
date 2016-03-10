@@ -38,7 +38,7 @@ public class Main {
                 int numberPracticum = Integer.parseInt(gegevensVak.get(4));
                 int maxStudentsPracticum = Integer.parseInt(gegevensVak.get(5));
 
-                List<Integer> courseStudents = new ArrayList<Integer>();
+                List<Student> courseStudents = new ArrayList<Student>();
 
                 Course newCourse = new Course(name, numberLectures, numberWorkgroups, maxStudentsGroups, numberPracticum, maxStudentsPracticum, courseStudents);
                 courses.add(newCourse);
@@ -85,42 +85,23 @@ public class Main {
                 //Instantiation of variable with list of Course belonging to student
                 List<String> studentCourses = gegevens.subList(3, gegevens.size());
 
+
+                Student newStudent = new Student(lastName, firstName, studentNumber, studentCourses);
+                students.add(newStudent);
+
                 // Voegt student toe aan course
                 for (int i = 0; i < courses.size(); i++){
                     Course course = courses.get(i);
                     if (studentCourses.contains(course.name)) {
-                        course.courseStudents.add(studentNumber);
+                        course.courseStudents.add(newStudent);
                     }
                 }
-                Student newStudent = new Student(lastName, firstName, studentNumber, studentCourses);
-                students.add(newStudent);
 
             }
             csvStudentGegevens.close();
         } catch (IOException e) {
             System.out.println("File Read Error Students");
         }
-
-        //Test Prints. Herkent ook of er meerdere werkgroepen nodig zijn!!
-        for(int i = 0; i < courses.size(); i++){
-            Course course = courses.get(i);
-            System.out.println(course.name+" "+course.courseStudents.size());
-            if (course.courseStudents.size() > course.maxStudentsGroups && course.numberWorkGroups > 0){
-                int numberGroups = (int) Math.ceil(((double) course.courseStudents.size())/((double) course.maxStudentsGroups));
-                System.out.println(ANSI_RED + numberGroups + " werkgroepen nodig (Capaciteit Werkgroep = "
-                         + course.maxStudentsGroups+ANSI_RESET+")");
-
-            }
-            if  (course.courseStudents.size() > course.maxStudentsPracticum && course.numberPracticum > 0){
-
-                int numberPracticumGroups = (int) Math.ceil(((double) course.courseStudents.size())/((double) course.maxStudentsPracticum));
-                System.out.println(ANSI_RED + numberPracticumGroups +
-                        " practicumgroepen nodig (Capaciteit Practicumgroep=" + course.maxStudentsPracticum+ANSI_RESET+")");
-            }
-        }
-
-
-
 
         //For loop die activities aanmaakt
         //Hier zouden we de eerste heuristieken kunnen toepassen
@@ -130,7 +111,7 @@ public class Main {
 
             // Maakt 1 hoorcollege groep aan
             if (course.numberLectures > 0) {
-                Activity hoorcollege = new Activity(course.name, "Hoorcollege", course.numberLectures, 1, course.courseStudents);
+                Activity hoorcollege = new Activity(course, "Hoorcollege", course.numberLectures, 1, course.courseStudents);
                 activities.add(hoorcollege);
             }
 
@@ -142,23 +123,23 @@ public class Main {
                     int numberGroups = (int) Math.ceil(((double) course.courseStudents.size()) / ((double) course.maxStudentsGroups));
                     int j;
                     for (j = 1; j < numberGroups; j++) {
-                        List<Integer> studentsWorkGroup = course.courseStudents.subList((j - 1) * course.maxStudentsGroups, j * course.maxStudentsGroups - 1);
-                        Activity workGroup = new Activity(course.name, "Werkgroep", course.numberWorkGroups, j, studentsWorkGroup);
+                        List<Student> studentsWorkGroup = course.courseStudents.subList((j - 1) * course.maxStudentsGroups, j * course.maxStudentsGroups );
+                        Activity workGroup = new Activity(course, "Werkgroep", course.numberWorkGroups, j, studentsWorkGroup);
                         activities.add(workGroup);
                     }
-                    int lastStudent = ((course.numberWorkGroups - 1) * course.maxStudentsGroups);
-                    List studentsWorkGroup = course.courseStudents.subList(lastStudent, course.courseStudents.size());
-                    Activity workGroup = new Activity(course.name, "Werkgroep", course.numberWorkGroups, j, studentsWorkGroup);
+                    List studentsWorkGroup = course.courseStudents.subList(course.maxStudentsGroups*(j-1), course.courseStudents.size());
+                    Activity workGroup = new Activity(course, "Werkgroep", course.numberWorkGroups, j, studentsWorkGroup);
                     activities.add(workGroup);
 
                 }
                 //Maakt 1 werkgroep
                 else {
-                    Activity workGroup = new Activity(course.name, "Werkgroep", course.numberWorkGroups, 1, course.courseStudents);
+                    Activity workGroup = new Activity(course, "Werkgroep", course.numberWorkGroups, 1, course.courseStudents);
                     activities.add(workGroup);
                 }
             }
 
+            // Algoritme om practicumgroepen aan te maken
             if (course.numberPracticum > 0) {
 
                     // Verdeelt studenten over practicumgroepen als er meer studenten zijn dan capaciteit van 1 werkgroep
@@ -167,20 +148,18 @@ public class Main {
                     int j;
 
                     for (j = 1; j < numberGroups; j++){
-                        List<Integer> studentsPracticumGroup = course.courseStudents.subList(((j-1)*course.maxStudentsPracticum)+1, j*course.maxStudentsPracticum);
-                        Activity workGroup = new Activity(course.name, "Practicum", course.numberPracticum, j, studentsPracticumGroup );
+                        List<Student> studentsPracticumGroup = course.courseStudents.subList(((j-1)*course.maxStudentsPracticum), j*course.maxStudentsPracticum);
+                        Activity workGroup = new Activity(course, "Practicum", course.numberPracticum, j, studentsPracticumGroup );
                         activities.add(workGroup);
                     }
-
-                    int lastStudent = ((course.numberPracticum -1)*course.maxStudentsPracticum );
-                    List studentsWorkGroup = course.courseStudents.subList(lastStudent, course.courseStudents.size() );
-                    Activity workGroup = new Activity(course.name, "Practicum", course.numberPracticum, j, studentsWorkGroup);
+                    List studentsWorkGroup = course.courseStudents.subList(course.maxStudentsPracticum*(j-1), course.courseStudents.size());
+                    Activity workGroup = new Activity(course, "Practicum", course.numberPracticum, j, studentsWorkGroup);
                     activities.add(workGroup);
                 }
 
                 //Maakt 1 Practicumgroep
                 else {
-                    Activity practicumGroup = new Activity(course.name, "Practicum", course.numberPracticum, 1, course.courseStudents);
+                    Activity practicumGroup = new Activity(course, "Practicum", course.numberPracticum, 1, course.courseStudents);
                     activities.add(practicumGroup);
 
                 }
@@ -189,8 +168,23 @@ public class Main {
             }
         }
 
-        for(int i = 0; i < activities.size();i++) {
-            System.out.println(activities.get(i));
+        //Print alle Activities met bijbehorende studentnummers van studenten
+        for(int i = 0; i < activities.size() ; i++) {
+
+            //Stukje code die studentNumber uit lijst van Student extraheert
+            List studentList = activities.get(i).studentGroup;
+            List<Integer> studentNumberList = new ArrayList<Integer>();
+            int studentNumber;
+            for (int x = 0; x < studentList.size() ; x++){
+
+                Student thisStudent = (Student) studentList.get(x);
+                studentNumber = thisStudent.studentNumber;
+                studentNumberList.add(studentNumber);
+            }
+
+            System.out.println(activities.get(i).course.name + " | Aantal " + activities.get(i).activity + ": " +
+                    activities.get(i).occurrences + " | Groep: " + activities.get(i).groupNumber + " | Aantal studenten: " + activities.get(i).studentGroup.size() + " | Studentnummers: " +
+                    studentNumberList);
         }
         System.out.println("Aantal Activities: " + activities.size());
 

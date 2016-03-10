@@ -9,10 +9,10 @@ public class Course {
     public int maxStudentsGroups;
     public int numberPracticum;
     public int maxStudentsPracticum;
-    public List<Integer> courseStudents;
+    public List<Student> courseStudents;
 
 
-    public Course(String name, int numberLectures, int numberWorkGroups, int maxStudentsGroups, int numberPracticum, int maxStudentsPracticum, List<Integer> courseStudents){
+    public Course(String name, int numberLectures, int numberWorkGroups, int maxStudentsGroups, int numberPracticum, int maxStudentsPracticum, List<Student> courseStudents){
         this.name = name;
         this.numberLectures = numberLectures;
         this.courseStudents = courseStudents;
