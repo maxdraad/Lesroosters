@@ -21,6 +21,7 @@ public class Main {
         List<Room> rooms = new ArrayList<>();
         List<Student> students = new ArrayList<>();
         List<Activity> activities = new ArrayList<>();
+        List<Timeslot> timeslot = new ArrayList<>();
 
 
         // Read in all courses and define their features
@@ -173,7 +174,7 @@ public class Main {
 
             //Stukje code die studentNumber uit lijst van Student extraheert
             List studentList = activities.get(i).studentGroup;
-            List<Integer> studentNumberList = new ArrayList<Integer>();
+            List<Integer> studentNumberList = new ArrayList<>();
             int studentNumber;
             for (int x = 0; x < studentList.size() ; x++){
 
@@ -186,11 +187,30 @@ public class Main {
                     activities.get(i).occurrences + " | Groep: " + activities.get(i).groupNumber + " | Aantal studenten: " + activities.get(i).studentGroup.size() + " | Studentnummers: " +
                     studentNumberList);
         }
+
         System.out.println("Aantal Activities: " + activities.size());
 
         createActivities();
 
+        //Maakt 5 timeslots aan//
+        Timeslot newTimeslot = new Timeslot("9 tot 11");
+        timeslot.add(newTimeslot);
+        Timeslot newTimeslot2 = new Timeslot("11 tot 13");
+        timeslot.add(newTimeslot2);
+        Timeslot newTimeslot3 = new Timeslot("13 tot 15");
+        timeslot.add(newTimeslot3);
+        Timeslot newTimeslot4 = new Timeslot("15 tot 17");
+        timeslot.add(newTimeslot4);
+        Timeslot newTimeslot5 = new Timeslot("17 tot 19");
+        timeslot.add(newTimeslot5);
+        //duplicate code, hoe krijgen we dit in een loop?//
+
+
+
+
     }
+
+
     private static void createActivities(){
         //Deze method kunnen we gaan gebruiken om activities te maken
         System.out.println("Test activity");
