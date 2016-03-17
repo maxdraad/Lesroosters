@@ -188,7 +188,11 @@ public class Main {
         }
         System.out.println("Aantal Activities: " + activities.size());
 
+        createActivities();
 
-
+    }
+    private static void createActivities(){
+        //Deze method kunnen we gaan gebruiken om activities te maken
+        System.out.println("Test activity");
     }
 }
