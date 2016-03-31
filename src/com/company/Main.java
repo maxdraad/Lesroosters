@@ -193,17 +193,10 @@ public class Main {
         createActivities();
 
         //Maakt 5 timeslots aan//
-        Timeslot newTimeslot = new Timeslot("9 tot 11");
-        timeslot.add(newTimeslot);
-        Timeslot newTimeslot2 = new Timeslot("11 tot 13");
-        timeslot.add(newTimeslot2);
-        Timeslot newTimeslot3 = new Timeslot("13 tot 15");
-        timeslot.add(newTimeslot3);
-        Timeslot newTimeslot4 = new Timeslot("15 tot 17");
-        timeslot.add(newTimeslot4);
-        Timeslot newTimeslot5 = new Timeslot("17 tot 19");
-        timeslot.add(newTimeslot5);
-        //duplicate code, hoe krijgen we dit in een loop?//
+        for(int i = 1; i<=5; i++){
+            Timeslot newTimeslot = new Timeslot(7+(2*i) + " tot " + 9+(2*i) );
+            timeslot.add(newTimeslot);
+        }
 
 
 
