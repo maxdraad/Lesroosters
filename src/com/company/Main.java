@@ -142,8 +142,8 @@ public class Main {
                 studentNumberList.add(studentNumber);
             }
 
-            System.out.println(activities.get(i).course.name + " | Aantal " + activities.get(i).activity + ": " +
-                    activities.get(i).occurrences + " | Groep: " + activities.get(i).groupNumber + " | Aantal studenten: " + activities.get(i).studentGroup.size() + " | Studentnummers: " +
+            System.out.println(activities.get(i).course.name + " | " + activities.get(i).activity + " # " +
+                    activities.get(i).occurrence + " | Groep: " + activities.get(i).groupNumber + " | Aantal studenten: " + activities.get(i).studentGroup.size() + " | Studentnummers: " +
                     studentNumberList);
         }
 
@@ -160,37 +160,38 @@ public class Main {
     }
 
     //Method om activities mee te maken. WERKT :))
-    public static List<Activity> createActivity(Course course, Integer activitiesPerWeek, Integer maxNumberStudents, String nameLectureType, boolean hoorcollege){
+    public List<Activity> createActivity(Course course, Integer activitiesPerWeek, Integer maxNumberStudents, String nameLectureType, boolean hoorcollege){
         List<Activity> activities = new ArrayList<>();
         // Algoritme om (werk)groepen aan te maken
-        if (hoorcollege == false && activitiesPerWeek >= 1) {
+        for (int i = 1; i <= activitiesPerWeek; i++) {
+            if (hoorcollege == false && activitiesPerWeek >= 1) {
 
-            // Verdeelt studenten over groepen als er meer studenten zijn dan capaciteit van 1 (werk)groep
-            if (course.courseStudents.size() > maxNumberStudents) {
-                int numberGroups = (int) Math.ceil(((double) course.courseStudents.size()) / ((double) maxNumberStudents));
-                int j;
-                for (j = 1; j < numberGroups; j++) {
-                    List<Student> studentsWorkGroup = course.courseStudents.subList((j - 1) * maxNumberStudents, j * maxNumberStudents);
-                    Activity workGroup = new Activity(course, nameLectureType, activitiesPerWeek, j, studentsWorkGroup);
+                // Verdeelt studenten over groepen als er meer studenten zijn dan capaciteit van 1 (werk)groep
+                if (course.courseStudents.size() > maxNumberStudents) {
+                    int numberGroups = (int) Math.ceil(((double) course.courseStudents.size()) / ((double) maxNumberStudents));
+                    int j;
+                    for (j = 1; j < numberGroups; j++) {
+                        List<Student> studentsWorkGroup = course.courseStudents.subList((j - 1) * maxNumberStudents, j * maxNumberStudents);
+
+
+                        Activity workGroup = new Activity(course, nameLectureType, i, j, studentsWorkGroup);
+                        activities.add(workGroup);
+                    }
+                    List studentsWorkGroup = course.courseStudents.subList(maxNumberStudents * (j - 1), course.courseStudents.size());
+                    Activity workGroup = new Activity(course, nameLectureType, i, j, studentsWorkGroup);
                     activities.add(workGroup);
-                }
-                List studentsWorkGroup = course.courseStudents.subList(maxNumberStudents * (j - 1), course.courseStudents.size());
-                Activity workGroup = new Activity(course, nameLectureType, activitiesPerWeek, j, studentsWorkGroup);
-                activities.add(workGroup);
 
-            }
-            //Maakt 1 (werk)groep
-            else {
-                Activity subGroup = new Activity(course, nameLectureType, activitiesPerWeek, 1, course.courseStudents);
-                activities.add(subGroup);
+                }
+                //Maakt 1 (werk)groep
+                else {
+                    Activity subGroup = new Activity(course, nameLectureType, i, 1, course.courseStudents);
+                    activities.add(subGroup);
+                }
+            } else if (hoorcollege == true && activitiesPerWeek >= 1) {
+                Activity hoorCollege = new Activity(course, nameLectureType, i, 1, course.courseStudents);
+                activities.add(hoorCollege);
             }
         }
-
-        else if (hoorcollege == true && activitiesPerWeek >= 1){
-            Activity hoorCollege = new Activity(course, nameLectureType, activitiesPerWeek, 1, course.courseStudents);
-            activities.add(hoorCollege);
-            }
-
         return activities;
     }
 }
