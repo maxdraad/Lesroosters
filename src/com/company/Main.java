@@ -194,9 +194,11 @@ public class Main {
 
 
         //Maakt 5 timeslots aan//
-        for (int i = 1; i <= 5; i++) {
-            Timeslot newTimeslot = new Timeslot(7 + (2 * i) + " tot " + 9 + (2 * i));
-            timeslot.add(newTimeslot);
+        for(int i = 1; i<= 5; i++){
+            for (int j = 1; j <= 5; j++) {
+                Timeslot newTimeslot = new Timeslot(7 + (2 * j) + " tot " + 9 + (2 * j), i);
+                timeslot.add(newTimeslot);
+            }
         }
 
 
