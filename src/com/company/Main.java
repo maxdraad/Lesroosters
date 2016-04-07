@@ -12,30 +12,29 @@ public class Main {
     public static final String ANSI_RED = "\u001B[31m";
     //En weer zwart te maken
     public static final String ANSI_RESET = "\u001B[0m";
-    public static int test1;
-    //method
-    public static void test(){
-        test1 = 4;
-    }
-    public static void printit(){
-        System.out.println(test1);
-    }
+
+    // ArrayList to keep al courses, rooms and students and their information
+    public List<Course> courses = new ArrayList<>();
+    public List<Room> rooms = new ArrayList<>();
+    public List<Student> students = new ArrayList<>();
+    public List<Activity> activities = new ArrayList<>();
+    public List<Timeslot> timeslot = new ArrayList<>();
+
     public static void main(String[] args) {
         new Main().go();
     }
 
-    public void go(){
-        test();
-        printit();
+    public void go() {
 
-        // ArrayList to keep al courses, rooms and students and their information
-        List<Course> courses = new ArrayList<>();
-        List<Room> rooms = new ArrayList<>();
-        List<Student> students = new ArrayList<>();
-        List<Activity> activities = new ArrayList<>();
-        List<Timeslot> timeslot = new ArrayList<>();
+        getCourses();
+        getRooms();
+        getStudents();
+        makeTimeslots();
+        makeActivities();
 
+    }
 
+    public void getCourses(){
         // Read all courses from file and define their features
         try {
             BufferedReader csvVakkenGegevens = new BufferedReader(new FileReader("resources/vakken_roostering.csv"));
@@ -60,7 +59,9 @@ public class Main {
         } catch (IOException e) {
             System.out.println("File Read Error Course");
         }
+    }
 
+    public void getRooms(){
         // Read in all lecture rooms and their capacity
         try {
             BufferedReader csvZaalGegevens = new BufferedReader(new FileReader("resources/zalen_roostering.csv"));
@@ -75,11 +76,13 @@ public class Main {
                 Room newRoom = new Room(roomName, capacity);
                 rooms.add(newRoom);
             }
-
+            csvZaalGegevens.close();
         } catch (IOException e) {
             System.out.println("File Read Error Rooms");
         }
+    }
 
+    public void getStudents(){
         // Read in all students and define their features
         try {
             BufferedReader csvStudentGegevens = new BufferedReader(new FileReader("resources/studenten_roostering.csv"));
@@ -92,10 +95,8 @@ public class Main {
                 String firstName = gegevens.get(1);
                 int studentNumber = Integer.parseInt(gegevens.get(2));
 
-
                 //Instantiation of variable with list of Course belonging to student
                 List<String> studentCourses = gegevens.subList(3, gegevens.size());
-
 
                 Student newStudent = new Student(lastName, firstName, studentNumber, studentCourses);
                 students.add(newStudent);
@@ -107,14 +108,24 @@ public class Main {
                         course.courseStudents.add(newStudent);
                     }
                 }
-
             }
             csvStudentGegevens.close();
         } catch (IOException e) {
             System.out.println("File Read Error Students");
         }
+    }
 
+    public void makeTimeslots(){
+        //Maakt 5 timeslots aan//
+        for(int i = 1; i<= 5; i++){
+            for (int j = 1; j <= 5; j++) {
+                Timeslot newTimeslot = new Timeslot(7 + (2 * j) + " tot " + 9 + (2 * j), i);
+                timeslot.add(newTimeslot);
+            }
+        }
+    }
 
+    public void makeActivities(){
         //For loop die activities aanmaakt
         //Hier zouden we de eerste heuristieken kunnen toepassen
 
@@ -125,8 +136,6 @@ public class Main {
             activities.addAll(createActivity(course, course.numberWorkGroups, course.maxStudentsGroups, "Werkcollege", false));
             activities.addAll(createActivity(course, course.numberPracticum, course.maxStudentsPracticum, "Practicum", false));
         }
-
-
 
         //Print alle Activities met bijbehorende studentnummers van studenten
         for (int i = 0; i < activities.size(); i++) {
@@ -142,21 +151,12 @@ public class Main {
                 studentNumberList.add(studentNumber);
             }
 
-            System.out.println(activities.get(i).course.name + " | " + activities.get(i).activity + " # " +
+            System.out.println(activities.get(i).course.name + " | Aantal " + activities.get(i).activity + ": " +
                     activities.get(i).occurrence + " | Groep: " + activities.get(i).groupNumber + " | Aantal studenten: " + activities.get(i).studentGroup.size() + " | Studentnummers: " +
                     studentNumberList);
         }
 
         System.out.println("Aantal Activities: " + activities.size());
-
-
-        //Maakt 5 timeslots aan//
-        for(int i = 1; i<= 5; i++){
-            for (int j = 1; j <= 5; j++) {
-                Timeslot newTimeslot = new Timeslot(7 + (2 * j) + " tot " + 9 + (2 * j), i);
-                timeslot.add(newTimeslot);
-            }
-        }
     }
 
     //Method om activities mee te maken. WERKT :))
@@ -164,7 +164,7 @@ public class Main {
         List<Activity> activities = new ArrayList<>();
         // Algoritme om (werk)groepen aan te maken
         for (int i = 1; i <= activitiesPerWeek; i++) {
-            if (hoorcollege == false && activitiesPerWeek >= 1) {
+            if (!hoorcollege && activitiesPerWeek >= 1) {
 
                 // Verdeelt studenten over groepen als er meer studenten zijn dan capaciteit van 1 (werk)groep
                 if (course.courseStudents.size() > maxNumberStudents) {
@@ -187,7 +187,7 @@ public class Main {
                     Activity subGroup = new Activity(course, nameLectureType, i, 1, course.courseStudents);
                     activities.add(subGroup);
                 }
-            } else if (hoorcollege == true && activitiesPerWeek >= 1) {
+            } else if (hoorcollege && activitiesPerWeek >= 1) {
                 Activity hoorCollege = new Activity(course, nameLectureType, i, 1, course.courseStudents);
                 activities.add(hoorCollege);
             }
