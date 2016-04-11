@@ -74,14 +74,25 @@ public class Main {
                 List<String> gegevensZaal = Arrays.asList(room.split(";"));
                 String roomName = gegevensZaal.get(0);
                 int capacity = Integer.parseInt(gegevensZaal.get(1));
+                if (capacity > 100) {
+                    List<Activity> list = new ArrayList<>(20);
+                    Room newRoom = new Room(roomName, capacity, false, list);
+                    rooms.add(newRoom);
+                } else {
+                    List<Activity> list = new ArrayList<>(25);
+                    Room newRoom = new Room(roomName, capacity, true, list);
+                    rooms.add(newRoom);
+                }
 
-                Room newRoom = new Room(roomName, capacity);
-                rooms.add(newRoom);
             }
             csvZaalGegevens.close();
         } catch (IOException e) {
             System.out.println("File Read Error Rooms");
         }
+        for (int i=1; i< rooms.size();i++){
+            System.out.println(rooms.get(i).name+ "  "+rooms.get(i).nightSlot);
+        }
+
     }
 
     public void getStudents(){
