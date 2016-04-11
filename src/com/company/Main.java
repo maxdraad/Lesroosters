@@ -34,6 +34,16 @@ public class Main {
         makeActivities();
         Timetable.makeTable(activities, timeslots);
 
+        // Dit stukje maakt de eerste prototype roosters :)
+
+        rooms.get(1).timetable.add(3, activities.get(1));
+        rooms.get(1).timetable.add(6, activities.get(4));
+        rooms.get(2).timetable.add(20, activities.get(4));
+        for (int i=1; i< rooms.size();i++){
+            System.out.println(rooms.get(i).name+ "  "+rooms.get(i).nightSlot + " " +rooms.get(i).timetable);
+        }
+
+
     }
 
     public void getCourses(){
@@ -75,12 +85,18 @@ public class Main {
                 String roomName = gegevensZaal.get(0);
                 int capacity = Integer.parseInt(gegevensZaal.get(1));
                 if (capacity > 100) {
-                    List<Activity> list = new ArrayList<>(20);
-                    Room newRoom = new Room(roomName, capacity, false, list);
+                    List<Activity> list = new ArrayList<>(25);
+                    for (int i = 0; i < 25; i++) {
+                        list.add(null);
+                    }
+                    Room newRoom = new Room(roomName, capacity, true, list);
                     rooms.add(newRoom);
                 } else {
-                    List<Activity> list = new ArrayList<>(25);
-                    Room newRoom = new Room(roomName, capacity, true, list);
+                    List<Activity> list = new ArrayList<>(2);
+                    for (int i = 0; i < 20; i++) {
+                        list.add(null);
+                    }
+                    Room newRoom = new Room(roomName, capacity, false, list);
                     rooms.add(newRoom);
                 }
 
@@ -89,9 +105,7 @@ public class Main {
         } catch (IOException e) {
             System.out.println("File Read Error Rooms");
         }
-        for (int i=1; i< rooms.size();i++){
-            System.out.println(rooms.get(i).name+ "  "+rooms.get(i).nightSlot);
-        }
+
 
     }
 
