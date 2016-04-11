@@ -18,7 +18,7 @@ public class Main {
     public List<Room> rooms = new ArrayList<>();
     public List<Student> students = new ArrayList<>();
     public List<Activity> activities = new ArrayList<>();
-    public List<Timeslot> timeslot = new ArrayList<>();
+    public List<Timeslot> timeslots = new ArrayList<>();
 
     public static void main(String[] args) {
         new Main().go();
@@ -31,6 +31,7 @@ public class Main {
         getStudents();
         makeTimeslots();
         makeActivities();
+        Timetable.makeTable(activities, timeslots);
 
     }
 
@@ -120,7 +121,7 @@ public class Main {
         for(int i = 1; i<= 5; i++){
             for (int j = 1; j <= 5; j++) {
                 Timeslot newTimeslot = new Timeslot(7 + (2 * j) + " tot " + 9 + (2 * j), i);
-                timeslot.add(newTimeslot);
+                timeslots.add(newTimeslot);
             }
         }
     }
@@ -151,9 +152,9 @@ public class Main {
                 studentNumberList.add(studentNumber);
             }
 
-            System.out.println(activities.get(i).course.name + " | Aantal " + activities.get(i).activity + ": " +
-                    activities.get(i).occurrence + " | Groep: " + activities.get(i).groupNumber + " | Aantal studenten: " + activities.get(i).studentGroup.size() + " | Studentnummers: " +
-                    studentNumberList);
+//            System.out.println(activities.get(i).course.name + " | Aantal " + activities.get(i).activity + ": " +
+//                    activities.get(i).occurrence + " | Groep: " + activities.get(i).groupNumber + " | Aantal studenten: " + activities.get(i).studentGroup.size() + " | Studentnummers: " +
+//                    studentNumberList);
         }
 
         System.out.println("Aantal Activities: " + activities.size());
