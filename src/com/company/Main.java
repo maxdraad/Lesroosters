@@ -8,6 +8,7 @@ import java.util.*;
 
 public class Main {
 
+    //push test Max
     //Om printout tekst in kleur te krijgen
     public static final String ANSI_RED = "\u001B[31m";
     //En weer zwart te maken
