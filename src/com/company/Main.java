@@ -49,12 +49,12 @@ public class Main {
                 j = intGenerator.nextInt(amountOfTimeslots);
             }
             rooms.get(i).timetable.set(j, activities.get(x));
-            System.out.println(activities.get(x).course.name+ " " + activities.get(x).activity + " ingedeeld in lokaal " + rooms.get(i).name + ", timeslot " + j );
-            try {
+            /*System.out.println(activities.get(x).course.name+ " " + activities.get(x).activity + " ingedeeld in lokaal " + rooms.get(i).name + ", timeslot " + j );
+              try {
                 Thread.sleep(100);                 //1000 milliseconds is one second.
             } catch(InterruptedException ex) {
                 Thread.currentThread().interrupt();
-            }
+            }*/
         }
         for (int i = 0; i < rooms.size();i++){
             System.out.println(rooms.get(i).name+ "  "+rooms.get(i).nightSlot + " " +rooms.get(i).timetable);
