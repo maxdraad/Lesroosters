@@ -48,8 +48,7 @@ public class Main {
                 amountOfTimeslots = rooms.get(i).timetable.size();
                 j = intGenerator.nextInt(amountOfTimeslots);
             }
-            rooms.get(i).timetable.remove(j);
-            rooms.get(i).timetable.add(j, activities.get(x));
+            rooms.get(i).timetable.set(j, activities.get(x));
             System.out.println(activities.get(x).course.name+ " " + activities.get(x).activity + " ingedeeld in lokaal " + rooms.get(i).name + ", timeslot " + j );
             try {
                 Thread.sleep(100);                 //1000 milliseconds is one second.
@@ -57,11 +56,11 @@ public class Main {
                 Thread.currentThread().interrupt();
             }
         }
-        for (int i=0; i< rooms.size();i++){
+        for (int i = 0; i < rooms.size();i++){
             System.out.println(rooms.get(i).name+ "  "+rooms.get(i).nightSlot + " " +rooms.get(i).timetable);
         }
 
-        for (int i=1; i< rooms.size();i++){
+        for (int i = 0; i < rooms.size();i++){
             // Hier kom een fucntie die berekent of er daadwerkelijk 129 activities in het rooster zitten
 
         }
