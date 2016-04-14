@@ -20,6 +20,7 @@ public class Main {
     public List<Student> students = new ArrayList<>();
     public List<Activity> activities = new ArrayList<>();
     public List<Timeslot> timeslots = new ArrayList<>();
+    public Random intGenerator = new Random();
 
     public static void main(String[] args) {
         new Main().go();
@@ -32,16 +33,32 @@ public class Main {
         getStudents();
         makeTimeslots();
         makeActivities();
-        Timetable.makeTable(activities, timeslots);
+        // Niet meer nodig Timetable.makeTable(activities, timeslots);
 
-        // Dit stukje maakt de eerste prototype roosters :)
+        // Dit stukje maakt random roosters:
 
-        rooms.get(1).timetable.add(3, activities.get(1));
-        rooms.get(1).timetable.add(6, activities.get(4));
-        rooms.get(2).timetable.add(20, activities.get(4));
+        int amountOfRooms = rooms.size();
+        int amountOfActivities = activities.size();
+        for (int x = 0; x < amountOfActivities; x++){
+            int i = intGenerator.nextInt(amountOfRooms);
+            int amountOfTimeslots = rooms.get(i).timetable.size();
+            int j = intGenerator.nextInt(amountOfTimeslots);
+            while (rooms.get(i).timetable.get(j) != null){
+                i = intGenerator.nextInt(amountOfRooms);
+                amountOfTimeslots = rooms.get(i).timetable.size();
+                j = intGenerator.nextInt(amountOfTimeslots);
+            }
+            rooms.get(i).timetable.add(j, activities.get(x));
+        }
         for (int i=1; i< rooms.size();i++){
             System.out.println(rooms.get(i).name+ "  "+rooms.get(i).nightSlot + " " +rooms.get(i).timetable);
         }
+
+        for (int i=1; i< rooms.size();i++){
+            // Hier kom een fucntie die berekent of er daadwerkelijk 129 activities in het rooster zitten
+
+        }
+
 
 
     }
