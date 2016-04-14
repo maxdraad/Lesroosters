@@ -48,9 +48,10 @@ public class Main {
                 amountOfTimeslots = rooms.get(i).timetable.size();
                 j = intGenerator.nextInt(amountOfTimeslots);
             }
+            rooms.get(i).timetable.remove(j);
             rooms.get(i).timetable.add(j, activities.get(x));
         }
-        for (int i=1; i< rooms.size();i++){
+        for (int i=0; i< rooms.size();i++){
             System.out.println(rooms.get(i).name+ "  "+rooms.get(i).nightSlot + " " +rooms.get(i).timetable);
         }
 
