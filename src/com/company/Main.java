@@ -60,10 +60,19 @@ public class Main {
             System.out.println(rooms.get(i).name+ "  "+rooms.get(i).nightSlot + " " +rooms.get(i).timetable);
         }
 
+        // is dit niet overbodig?
+        int activitiesInRooster = 0;
         for (int i = 0; i < rooms.size();i++){
             // Hier kom een fucntie die berekent of er daadwerkelijk 129 activities in het rooster zitten
-
+            for (int j = 0; j < rooms.get(i).timetable.size(); j++){
+                if(rooms.get(i).timetable.get(j) != null){
+                    activitiesInRooster++;
+                }
+            }
         }
+        System.out.println(activitiesInRooster);
+
+        // Score berekenen!
 
 
 
