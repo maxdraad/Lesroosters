@@ -8,7 +8,6 @@ import java.util.*;
 
 public class Main {
 
-    //push test Max
     //Om printout tekst in kleur te krijgen
     public static final String ANSI_RED = "\u001B[31m";
     //En weer zwart te maken
@@ -20,7 +19,12 @@ public class Main {
     public List<Student> students = new ArrayList<>();
     public List<Activity> activities = new ArrayList<>();
     public List<Timeslot> timeslots = new ArrayList<>();
+
+    //Random number generator
     public Random intGenerator = new Random();
+
+    //Score keeper
+    public int scoreValue;
 
     public static void main(String[] args) {
         new Main().go();
@@ -31,55 +35,17 @@ public class Main {
         getCourses();
         getRooms();
         getStudents();
-        makeTimeslots();
+        //makeTimeslots();
         makeActivities();
+        makeRandomSchedule();
+        computeScore();
         // Niet meer nodig Timetable.makeTable(activities, timeslots);
-
-        // Dit stukje maakt random roosters:
-
-        int amountOfRooms = rooms.size();
-        int amountOfActivities = activities.size();
-        for (int x = 0; x < amountOfActivities; x++){
-            int i = intGenerator.nextInt(amountOfRooms);
-            int amountOfTimeslots = rooms.get(i).timetable.size();
-            int j = intGenerator.nextInt(amountOfTimeslots);
-            while (rooms.get(i).timetable.get(j) != null){
-                i = intGenerator.nextInt(amountOfRooms);
-                amountOfTimeslots = rooms.get(i).timetable.size();
-                j = intGenerator.nextInt(amountOfTimeslots);
-            }
-            rooms.get(i).timetable.set(j, activities.get(x));
-            /*System.out.println(activities.get(x).course.name+ " " + activities.get(x).activity + " ingedeeld in lokaal " + rooms.get(i).name + ", timeslot " + j );
-              try {
-                Thread.sleep(100);                 //1000 milliseconds is one second.
-            } catch(InterruptedException ex) {
-                Thread.currentThread().interrupt();
-            }*/
-        }
-        for (int i = 0; i < rooms.size();i++){
-            System.out.println(rooms.get(i).name+ "  "+rooms.get(i).nightSlot + " " +rooms.get(i).timetable);
-        }
-
-        // is dit niet overbodig?
-        int activitiesInRooster = 0;
-        for (int i = 0; i < rooms.size();i++){
-            // Hier kom een fucntie die berekent of er daadwerkelijk 129 activities in het rooster zitten
-            for (int j = 0; j < rooms.get(i).timetable.size(); j++){
-                if(rooms.get(i).timetable.get(j) != null){
-                    activitiesInRooster++;
-                }
-            }
-        }
-        System.out.println(activitiesInRooster);
-
-        // Score berekenen!
-
 
 
     }
 
+    // Read all courses from file and define their features
     public void getCourses(){
-        // Read all courses from file and define their features
         try {
             BufferedReader csvVakkenGegevens = new BufferedReader(new FileReader("resources/vakken_roostering.csv"));
             String course;
@@ -105,8 +71,8 @@ public class Main {
         }
     }
 
+    // Read in all lecture rooms and their capacity
     public void getRooms(){
-        // Read in all lecture rooms and their capacity
         try {
             BufferedReader csvZaalGegevens = new BufferedReader(new FileReader("resources/zalen_roostering.csv"));
             String room;
@@ -141,8 +107,8 @@ public class Main {
 
     }
 
+    // Read in all students and define their features
     public void getStudents(){
-        // Read in all students and define their features
         try {
             BufferedReader csvStudentGegevens = new BufferedReader(new FileReader("resources/studenten_roostering.csv"));
             String student;
@@ -216,6 +182,52 @@ public class Main {
         }
 
         System.out.println("Aantal Activities: " + activities.size());
+    }
+
+    public void makeRandomSchedule(){
+        int amountOfRooms = rooms.size();
+        int amountOfActivities = activities.size();
+        for (Activity activity : activities) {
+            int i = intGenerator.nextInt(amountOfRooms);
+            int amountOfTimeslots = rooms.get(i).timetable.size();
+            int j = intGenerator.nextInt(amountOfTimeslots);
+            while (rooms.get(i).timetable.get(j) != null) {
+                i = intGenerator.nextInt(amountOfRooms);
+                amountOfTimeslots = rooms.get(i).timetable.size();
+                j = intGenerator.nextInt(amountOfTimeslots);
+            }
+            rooms.get(i).timetable.set(j, activity);
+            /*System.out.println(activities.get(x).course.name+ " " + activities.get(x).activity + " ingedeeld in lokaal " + rooms.get(i).name + ", timeslot " + j );
+              try {
+                Thread.sleep(100);                 //1000 milliseconds is one second.
+            } catch(InterruptedException ex) {
+                Thread.currentThread().interrupt();
+            }*/
+        }
+        for (Room room : rooms) System.out.println(room.name + "  " + room.nightSlot + " " + room.timetable);
+
+    }
+
+    public void computeScore(){
+        int activityCounter = 0;
+        for (Activity activity : activities){
+            for (Room room : rooms){
+                if (room.timetable.contains(activity)){
+                    activityCounter++;
+                    break;
+                }
+            }
+        }
+        if (activityCounter == activities.size()){
+            System.out.println("1000 punten, alle activities ingeroosterd");
+            scoreValue = 1000;
+        }
+        else{
+            System.out.println("0 punten, niet alle activities zijn ingeroosterd");
+            scoreValue = 0;
+        }
+        int studentConflictCounter = 0;
+        //Method die studenten met meerdere vakken op een tijdstip telt (dit is aantal maluspunten)
     }
 
     //Method om activities mee te maken. WERKT :))

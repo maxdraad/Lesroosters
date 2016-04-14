@@ -8,7 +8,6 @@ public class Activity {
     public String activity;
     public int occurrence;
     public int groupNumber;
-    public int numberActivityinWeek;
     public List<Student> studentGroup;
 
 
