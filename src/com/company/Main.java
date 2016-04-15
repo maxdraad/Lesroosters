@@ -33,48 +33,7 @@ public class Main {
         getStudents();
         makeTimeslots();
         makeActivities();
-        // Niet meer nodig Timetable.makeTable(activities, timeslots);
-
-        // Dit stukje maakt random roosters:
-
-        int amountOfRooms = rooms.size();
-        int amountOfActivities = activities.size();
-        for (int x = 0; x < amountOfActivities; x++){
-            int i = intGenerator.nextInt(amountOfRooms);
-            int amountOfTimeslots = rooms.get(i).timetable.size();
-            int j = intGenerator.nextInt(amountOfTimeslots);
-            while (rooms.get(i).timetable.get(j) != null){
-                i = intGenerator.nextInt(amountOfRooms);
-                amountOfTimeslots = rooms.get(i).timetable.size();
-                j = intGenerator.nextInt(amountOfTimeslots);
-            }
-            rooms.get(i).timetable.set(j, activities.get(x));
-            System.out.println(activities.get(x).course.name+ " " + activities.get(x).activity + " ingedeeld in lokaal " + rooms.get(i).name + ", timeslot " + j );
-            try {
-                Thread.sleep(100);                 //1000 milliseconds is one second.
-            } catch(InterruptedException ex) {
-                Thread.currentThread().interrupt();
-            }
-        }
-        for (int i = 0; i < rooms.size();i++){
-            System.out.println(rooms.get(i).name+ "  "+rooms.get(i).nightSlot + " " +rooms.get(i).timetable);
-        }
-
-        // is dit niet overbodig?
-        int activitiesInRooster = 0;
-        for (int i = 0; i < rooms.size();i++){
-            // Hier kom een fucntie die berekent of er daadwerkelijk 129 activities in het rooster zitten
-            for (int j = 0; j < rooms.get(i).timetable.size(); j++){
-                if(rooms.get(i).timetable.get(j) != null){
-                    activitiesInRooster++;
-                }
-            }
-        }
-        System.out.println(activitiesInRooster);
-
-        // Score berekenen!
-
-
+        makeTimetable();
 
     }
 
@@ -252,6 +211,46 @@ public class Main {
             }
         }
         return activities;
+    }
+
+    public void makeTimetable(){
+        // Dit stukje maakt random roosters:
+        int amountOfRooms = rooms.size();
+        int amountOfActivities = activities.size();
+        for (int x = 0; x < amountOfActivities; x++){
+            int i = intGenerator.nextInt(amountOfRooms);
+            int amountOfTimeslots = rooms.get(i).timetable.size();
+            int j = intGenerator.nextInt(amountOfTimeslots);
+            while (rooms.get(i).timetable.get(j) != null){
+                i = intGenerator.nextInt(amountOfRooms);
+                amountOfTimeslots = rooms.get(i).timetable.size();
+                j = intGenerator.nextInt(amountOfTimeslots);
+            }
+            rooms.get(i).timetable.set(j, activities.get(x));
+            System.out.println(activities.get(x).course.name+ " " + activities.get(x).activity + " ingedeeld in lokaal " + rooms.get(i).name + ", timeslot " + j );
+            try {
+                Thread.sleep(100);                 //1000 milliseconds is one second.
+            } catch(InterruptedException ex) {
+                Thread.currentThread().interrupt();
+            }
+        }
+        for (int i = 0; i < rooms.size();i++){
+            System.out.println(rooms.get(i).name+ "  "+rooms.get(i).nightSlot + " " +rooms.get(i).timetable);
+        }
+
+        // is dit niet overbodig?
+        int activitiesInRooster = 0;
+        for (int i = 0; i < rooms.size();i++){
+            // Hier kom een fucntie die berekent of er daadwerkelijk 129 activities in het rooster zitten
+            for (int j = 0; j < rooms.get(i).timetable.size(); j++){
+                if(rooms.get(i).timetable.get(j) != null){
+                    activitiesInRooster++;
+                }
+            }
+        }
+        System.out.println(activitiesInRooster);
+
+        // Score berekenen!
     }
 }
 
