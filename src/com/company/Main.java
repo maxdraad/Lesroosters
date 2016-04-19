@@ -260,14 +260,13 @@ public class Main {
                 if (activity != null) {
                     for (Student student : activity.studentGroup) {
                         for (Room otherRoom : rooms) {
-                            Activity timetable = otherRoom.timetable.get(i);
-                            if (timetable != null) {
-                                if (timetable.studentGroup.contains(student)) {
+                            Activity otherActivity = otherRoom.timetable.get(i);
+                            if (otherActivity != null && otherActivity != activity) {
+                                if (otherActivity.studentGroup.contains(student)) {
                                     studentConflictCounter++;
                                 }
                             }
                         }
-                        studentConflictCounter--; //omdat de student altijd dubbel geteld wordt in het lokaal zelf
                     }
                 }
             }
