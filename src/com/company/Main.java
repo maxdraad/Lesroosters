@@ -226,24 +226,24 @@ public class Main {
             System.out.println("0 punten, niet alle activities zijn ingeroosterd");
             scoreValue = 0;
         }
+
         int studentConflictCounter = 0;
         //Method die studenten met meerdere vakken op een tijdstip telt (dit is aantal maluspunten)
 
-        /* Klopt nog iets niet - geeft altijd 709 als uitkomst.
         int capacityConflictCounter = 0;
-        for (Activity activity : activities){
-            for (Room room : rooms){
-                if (room.capacity < activity.studentGroup.size()){
-                    int numberOfConflict = activity.studentGroup.size()-room.capacity;
-                    for(int i = 0; i < numberOfConflict; i++) {
-                        capacityConflictCounter++;
+        for (Room room : rooms){
+            for (Activity activity : room.timetable){
+                if(activity != null) {
+                    if (room.capacity < activity.studentGroup.size()) {
+                        int numberOfConflict = activity.studentGroup.size() - room.capacity;
+                        capacityConflictCounter = capacityConflictCounter + numberOfConflict;
+                        break;
                     }
-                    break;
                 }
             }
         }
 
-        System.out.println(capacityConflictCounter + " studenten passen niet in hun lokaal!");*/
+        System.out.println(capacityConflictCounter + " studenten passen niet in hun lokaal!");
     }
 
     //Method om activities mee te maken. WERKT :))
