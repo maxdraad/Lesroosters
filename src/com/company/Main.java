@@ -18,13 +18,16 @@ public class Main {
     public List<Room> rooms = new ArrayList<>();
     public List<Student> students = new ArrayList<>();
     public List<Activity> activities = new ArrayList<>();
-    public List<Timeslot> timeslots = new ArrayList<>();
+    //public List<Timeslot> timeslots = new ArrayList<>();
 
     //Random number generator
     public Random intGenerator = new Random();
 
     //Score keeper
     public int scoreValue;
+
+    public int timeslots = 20;
+    public int timeslotsNight = 25;
 
     public static void main(String[] args) {
         new Main().go();
@@ -35,11 +38,9 @@ public class Main {
         getCourses();
         getRooms();
         getStudents();
-        //makeTimeslots();
         makeActivities();
         makeRandomSchedule();
         computeScore();
-        // Niet meer nodig Timetable.makeTable(activities, timeslots);
 
 
     }
@@ -140,7 +141,7 @@ public class Main {
         }
     }
 
-    public void makeTimeslots(){
+    /* public void makeTimeslots(){
         //Maakt 5 timeslots aan//
         for(int i = 1; i<= 5; i++){
             for (int j = 1; j <= 5; j++) {
@@ -149,19 +150,18 @@ public class Main {
             }
         }
     }
+    */
 
     public void makeActivities(){
         //For loop die activities aanmaakt
         //Hier zouden we de eerste heuristieken kunnen toepassen
-
-
-        for (int i = 0; i < courses.size(); i++) {
-            Course course = courses.get(i);
+        for (Course course: courses) {
             activities.addAll(createActivity(course, course.numberLectures, 0, "Hoorcollege", true));
             activities.addAll(createActivity(course, course.numberWorkGroups, course.maxStudentsGroups, "Werkcollege", false));
             activities.addAll(createActivity(course, course.numberPracticum, course.maxStudentsPracticum, "Practicum", false));
         }
 
+        /*
         //Print alle Activities met bijbehorende studentnummers van studenten
         for (int i = 0; i < activities.size(); i++) {
 
@@ -176,10 +176,11 @@ public class Main {
                 studentNumberList.add(studentNumber);
             }
 
-//            System.out.println(activities.get(i).course.name + " | Aantal " + activities.get(i).activity + ": " +
-//                    activities.get(i).occurrence + " | Groep: " + activities.get(i).groupNumber + " | Aantal studenten: " + activities.get(i).studentGroup.size() + " | Studentnummers: " +
-//                    studentNumberList);
+           System.out.println(activities.get(i).course.name + " | Aantal " + activities.get(i).activity + ": " +
+           activities.get(i).occurrence + " | Groep: " + activities.get(i).groupNumber + " | Aantal studenten: " + activities.get(i).studentGroup.size() + " | Studentnummers: " +
+           studentNumberList);
         }
+        */
 
         System.out.println("Aantal Activities: " + activities.size());
     }
@@ -231,13 +232,14 @@ public class Main {
         // Functie die rooster conflicten checkt
         int studentConflictCounter = 0;
         for (Room room : rooms){
-            for (int i = 0 ; i < 20 ; i++){ // i < 20 Hardcoded!! Moet gefixt
+            for (int i = 0 ; i < timeslots ; i++){
                 Activity activity = room.timetable.get(i);
                 if (activity != null) {
                     for (Student student : activity.studentGroup) {
                         for (Room otherRoom : rooms) {
-                            if (otherRoom.timetable.get(i) != null) {
-                                if (otherRoom.timetable.get(i).studentGroup.contains(student)) {
+                            Activity timetable = otherRoom.timetable.get(i);
+                            if (timetable != null) {
+                                if (timetable.studentGroup.contains(student)) {
                                     studentConflictCounter++;
                                 }
                             }
@@ -261,11 +263,31 @@ public class Main {
                 }
             }
         }
-        scoreValue = scoreValue - capacityConflictCounter;
+
         System.out.println(capacityConflictCounter + " studenten passen niet in hun lokaal!");
+
+        int nightSlotPenaltyCount = 0;
+        // Checkt gebruik van avondslot
+        for (Room room: rooms){
+            if (room.nightSlot){
+                for (int fromSlot = timeslots; fromSlot < timeslotsNight; fromSlot++){
+                    if (room.timetable.get(fromSlot) != null){
+                        nightSlotPenaltyCount = nightSlotPenaltyCount + 50;
+                    }
+                }
+            }
+        }
+
+        System.out.println("Nachtslot Maluspunten: "+nightSlotPenaltyCount);
+
+
+        scoreValue = scoreValue - capacityConflictCounter - studentConflictCounter - nightSlotPenaltyCount;
+        System.out.println("Totale score: " + scoreValue);
+
+
     }
 
-    //Method om activities mee te maken. WERKT :))
+    //Method om activities mee te maken
     public List<Activity> createActivity(Course course, Integer activitiesPerWeek, Integer maxNumberStudents, String nameLectureType, boolean hoorcollege){
         List<Activity> activities = new ArrayList<>();
         // Algoritme om (werk)groepen aan te maken
@@ -283,7 +305,7 @@ public class Main {
                         Activity workGroup = new Activity(course, nameLectureType, i, j, studentsWorkGroup);
                         activities.add(workGroup);
                     }
-                    List studentsWorkGroup = course.courseStudents.subList(maxNumberStudents * (j - 1), course.courseStudents.size());
+                    List<Student> studentsWorkGroup = course.courseStudents.subList(maxNumberStudents * (j - 1), course.courseStudents.size());
                     Activity workGroup = new Activity(course, nameLectureType, i, j, studentsWorkGroup);
                     activities.add(workGroup);
 
