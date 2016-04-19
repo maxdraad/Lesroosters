@@ -30,7 +30,7 @@ public class Main {
     public int timeslotsNight = 25;
     public int amountOfRooms;
     public int iterationsCounter = 0;
-    public int iterationsLimit = 10000;
+    public int iterationsLimit = 5000000;
 
     public int studentConflictCounter;
     public int capacityConflictCounter;
@@ -256,7 +256,12 @@ public class Main {
             scoreValue = 0;
         }
 
-        // Functie die rooster conflicten checkt
+        /*
+        Functie die rooster conflicten checkt
+        TODO: Een student wordt nog steeds (drie/vier) dubbel gecheckt, als ze op timeslot 1 in lokaal 1 zitten wordt
+        een conflict geteld als hij ook in lokaal 2 zit, maar opnieuw vanuit lokaal 2 naar 1.
+        */
+
         studentConflictCounter = 0;
         for (Room room : rooms){
             for (int i = 0 ; i < timeslots ; i++){
