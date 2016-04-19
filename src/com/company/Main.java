@@ -209,6 +209,7 @@ public class Main {
     }
 
     public void computeScore(){
+
         int activityCounter = 0;
         for (Activity activity : activities){
             for (Room room : rooms){
@@ -227,9 +228,28 @@ public class Main {
             scoreValue = 0;
         }
 
+        // Functie die rooster conflicten checkt
         int studentConflictCounter = 0;
-        //Method die studenten met meerdere vakken op een tijdstip telt (dit is aantal maluspunten)
+        for (Room room : rooms){
+            for (int i = 0 ; i < 20 ; i++){ // i < 20 Hardcoded!! Moet gefixt
+                Activity activity = room.timetable.get(i);
+                if (activity != null) {
+                    for (Student student : activity.studentGroup) {
+                        for (Room otherRoom : rooms) {
+                            if (otherRoom.timetable.get(i) != null) {
+                                if (otherRoom.timetable.get(i).studentGroup.contains(student)) {
+                                    studentConflictCounter++;
+                                }
+                            }
+                        }
+                        studentConflictCounter--; //omdat de student altijd dubbel geteld wordt in het lokaal zelf
+                    }
+                }
+            }
+        }
+        System.out.println(studentConflictCounter + " studenten zijn dubbel geroosterd!");
 
+        // Functie die capacatiteit conflicten checkt
         int capacityConflictCounter = 0;
         for (Room room : rooms){
             for (Activity activity : room.timetable){
@@ -237,12 +257,11 @@ public class Main {
                     if (room.capacity < activity.studentGroup.size()) {
                         int numberOfConflict = activity.studentGroup.size() - room.capacity;
                         capacityConflictCounter = capacityConflictCounter + numberOfConflict;
-                        break;
                     }
                 }
             }
         }
-
+        scoreValue = scoreValue - capacityConflictCounter;
         System.out.println(capacityConflictCounter + " studenten passen niet in hun lokaal!");
     }
 
