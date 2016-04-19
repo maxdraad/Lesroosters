@@ -92,7 +92,7 @@ public class Main {
             }
             csvVakkenGegevens.close();
         } catch (IOException e) {
-            System.out.println("File Read Error Course");
+            System.out.println("File Read Error Course ");
         }
     }
 
