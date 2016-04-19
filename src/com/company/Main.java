@@ -20,6 +20,8 @@ public class Main {
     public List<Activity> activities = new ArrayList<>();
     //public List<Timeslot> timeslots = new ArrayList<>();
 
+    ArrayList<Student> checkedStudentsList = new ArrayList<Student>();
+
     //Random number generator
     public Random intGenerator = new Random();
 
@@ -30,7 +32,7 @@ public class Main {
     public int timeslotsNight = 25;
     public int amountOfRooms;
     public int iterationsCounter = 0;
-    public int iterationsLimit = 5000000;
+    public int iterationsLimit = 1000;
 
     public int studentConflictCounter;
     public int capacityConflictCounter;
@@ -256,29 +258,32 @@ public class Main {
             scoreValue = 0;
         }
 
-        /*
-        Functie die rooster conflicten checkt
-        TODO: Een student wordt nog steeds (drie/vier) dubbel gecheckt, als ze op timeslot 1 in lokaal 1 zitten wordt
-        een conflict geteld als hij ook in lokaal 2 zit, maar opnieuw vanuit lokaal 2 naar 1.
-        */
+
+        //Functie die rooster conflicten checkt
+
 
         studentConflictCounter = 0;
-        for (Room room : rooms){
-            for (int i = 0 ; i < timeslots ; i++){
+
+        for (int i = 0 ; i < timeslots ; i++){
+            for (Room room : rooms){
                 Activity activity = room.timetable.get(i);
                 if (activity != null) {
                     for (Student student : activity.studentGroup) {
-                        for (Room otherRoom : rooms) {
-                            Activity otherActivity = otherRoom.timetable.get(i);
-                            if (otherActivity != null && otherActivity != activity) {
-                                if (otherActivity.studentGroup.contains(student)) {
-                                    studentConflictCounter++;
+                        if (!checkedStudentsList.contains(student)) {
+                            for (Room otherRoom : rooms) {
+                                Activity otherActivity = otherRoom.timetable.get(i);
+                                if (otherActivity != null && otherActivity != activity) {
+                                    if (otherActivity.studentGroup.contains(student)) {
+                                        studentConflictCounter++;
+                                    }
                                 }
                             }
                         }
+                        checkedStudentsList.add(student);
                     }
                 }
             }
+            checkedStudentsList.clear();
         }
 
 
