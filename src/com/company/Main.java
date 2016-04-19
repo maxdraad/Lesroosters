@@ -28,6 +28,14 @@ public class Main {
 
     public int timeslots = 20;
     public int timeslotsNight = 25;
+    public int amountOfRooms;
+    public int iterationsCounter = 0;
+    public int iterationsLimit = 100000;
+
+    public int studentConflictCounter;
+    public int capacityConflictCounter;
+    public int nightSlotPenaltyCount;
+
 
     public static void main(String[] args) {
         new Main().go();
@@ -41,6 +49,22 @@ public class Main {
         makeActivities();
         makeRandomSchedule();
         computeScore();
+
+        System.out.println("Nachtslot Maluspunten: "+nightSlotPenaltyCount);
+        System.out.println(studentConflictCounter + " studenten zijn dubbel geroosterd!");
+        System.out.println(capacityConflictCounter + " studenten passen niet in hun lokaal!");
+        System.out.println("Totale score: " + scoreValue);
+
+        while(iterationsCounter < iterationsLimit){
+            swapRandomActivities();
+            iterationsCounter++;
+        }
+
+        System.out.println("Score na "+iterationsLimit+" iteraties: "+scoreValue);
+        System.out.println("Nachtslot Maluspunten: "+nightSlotPenaltyCount);
+        System.out.println(studentConflictCounter + " studenten zijn dubbel geroosterd!");
+        System.out.println(capacityConflictCounter + " studenten passen niet in hun lokaal!");
+
 
 
     }
@@ -186,8 +210,7 @@ public class Main {
     }
 
     public void makeRandomSchedule(){
-        int amountOfRooms = rooms.size();
-        int amountOfActivities = activities.size();
+        amountOfRooms = rooms.size();
         for (Activity activity : activities) {
             int i = intGenerator.nextInt(amountOfRooms);
             int amountOfTimeslots = rooms.get(i).timetable.size();
@@ -221,16 +244,16 @@ public class Main {
             }
         }
         if (activityCounter == activities.size()){
-            System.out.println("1000 punten, alle activities ingeroosterd");
+            //System.out.println("1000 punten, alle activities ingeroosterd");
             scoreValue = 1000;
         }
         else{
-            System.out.println("0 punten, niet alle activities zijn ingeroosterd");
+            //System.out.println("0 punten, niet alle activities zijn ingeroosterd");
             scoreValue = 0;
         }
 
         // Functie die rooster conflicten checkt
-        int studentConflictCounter = 0;
+        studentConflictCounter = 0;
         for (Room room : rooms){
             for (int i = 0 ; i < timeslots ; i++){
                 Activity activity = room.timetable.get(i);
@@ -249,10 +272,10 @@ public class Main {
                 }
             }
         }
-        System.out.println(studentConflictCounter + " studenten zijn dubbel geroosterd!");
+
 
         // Functie die capacatiteit conflicten checkt
-        int capacityConflictCounter = 0;
+        capacityConflictCounter = 0;
         for (Room room : rooms){
             for (Activity activity : room.timetable){
                 if(activity != null) {
@@ -264,9 +287,7 @@ public class Main {
             }
         }
 
-        System.out.println(capacityConflictCounter + " studenten passen niet in hun lokaal!");
-
-        int nightSlotPenaltyCount = 0;
+        nightSlotPenaltyCount = 0;
         // Checkt gebruik van avondslot
         for (Room room: rooms){
             if (room.nightSlot){
@@ -278,12 +299,33 @@ public class Main {
             }
         }
 
-        System.out.println("Nachtslot Maluspunten: "+nightSlotPenaltyCount);
-
-
         scoreValue = scoreValue - capacityConflictCounter - studentConflictCounter - nightSlotPenaltyCount;
-        System.out.println("Totale score: " + scoreValue);
 
+
+
+    }
+
+    // Hill climbing swapactivities
+    public void swapRandomActivities(){
+        int room1 = intGenerator.nextInt(amountOfRooms);
+        int amountOfTimeslots1 = rooms.get(room1).timetable.size();
+        int timeslot1 = intGenerator.nextInt(amountOfTimeslots1);
+        Activity activity1 = rooms.get(room1).timetable.get(timeslot1);
+
+        int room2 = intGenerator.nextInt(amountOfRooms);
+        int amountOfTimeslots2 = rooms.get(room2).timetable.size();
+        int timeslot2 = intGenerator.nextInt(amountOfTimeslots2);
+        Activity activity2 = rooms.get(room2).timetable.get(timeslot2);
+
+        int currentScore = scoreValue;
+
+        rooms.get(room1).timetable.set(timeslot1, activity2);
+        rooms.get(room2).timetable.set(timeslot2, activity1);
+        computeScore();
+        if (scoreValue <= currentScore){
+            rooms.get(room1).timetable.set(timeslot1, activity1);
+            rooms.get(room2).timetable.set(timeslot2, activity2);
+        }
 
     }
 
