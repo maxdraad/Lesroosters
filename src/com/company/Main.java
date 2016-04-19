@@ -30,7 +30,7 @@ public class Main {
     public int timeslotsNight = 25;
     public int amountOfRooms;
     public int iterationsCounter = 0;
-    public int iterationsLimit = 100000;
+    public int iterationsLimit = 10000;
 
     public int studentConflictCounter;
     public int capacityConflictCounter;
@@ -65,7 +65,11 @@ public class Main {
         System.out.println(studentConflictCounter + " studenten zijn dubbel geroosterd!");
         System.out.println(capacityConflictCounter + " studenten passen niet in hun lokaal!");
 
-
+        // Het valt op dat het algoritme het nachtslot toch vaak gebruikt, de kans dat hij een activity in een nachtslot
+        // swapt met een timeslot dat niet in het nachtslot zit is:
+        // (5/145)*(140/145)*(16/145) = 0.00367378736 = 0.367378736%
+        //  1.00367378736 log (1.5) = 110.56966814, dus er is op 111 interaties een 50% kans voor zo'n swap.
+        // Blijkbaar is het nuttig het avondslot te gebruiken
 
     }
 
