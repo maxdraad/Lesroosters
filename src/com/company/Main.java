@@ -9,9 +9,9 @@ import java.util.*;
 public class Main {
 
     //Om printout tekst in kleur te krijgen
-    public static final String ANSI_RED = "\u001B[31m";
+//    public static final String ANSI_RED = "\u001B[31m";
     //En weer zwart te maken
-    public static final String ANSI_RESET = "\u001B[0m";
+//    public static final String ANSI_RESET = "\u001B[0m";
 
     // ArrayList to keep al courses, rooms and students and their information
     public List<Course> courses = new ArrayList<>();
@@ -32,7 +32,7 @@ public class Main {
     public int timeslotsNight = 25;
     public int amountOfRooms;
     public int iterationsCounter = 0;
-    public int iterationsLimit = 20000;
+    public int iterationsLimit = 10000;
 
     public int studentConflictCounter;
     public int capacityConflictCounter;
@@ -57,7 +57,7 @@ public class Main {
         System.out.println(capacityConflictCounter + " studenten passen niet in hun lokaal!");
         System.out.println("Totale score: " + scoreValue);
 
-        while(iterationsCounter < iterationsLimit){
+        while(iterationsCounter < iterationsLimit) {
             swapRandomActivities();
             iterationsCounter++;
         }
@@ -66,7 +66,6 @@ public class Main {
         System.out.println("Nachtslot Maluspunten: " + nightSlotPenaltyCount);
         System.out.println(studentConflictCounter + " studenten zijn dubbel geroosterd!");
         System.out.println(capacityConflictCounter + " studenten passen niet in hun lokaal!");
-
 
 
         // Het valt op dat het algoritme het nachtslot toch vaak gebruikt, de kans dat hij een activity in een nachtslot
@@ -339,6 +338,9 @@ public class Main {
         Activity activity2 = rooms.get(room2).timetable.get(timeslot2);
 
         int currentScore = scoreValue;
+        int currentStudentConflict = studentConflictCounter;
+        int currentCapacityConflict = capacityConflictCounter;
+        int currentNightslotPenalty = nightSlotPenaltyCount;
 
         rooms.get(room1).timetable.set(timeslot1, activity2);
         rooms.get(room2).timetable.set(timeslot2, activity1);
@@ -347,6 +349,9 @@ public class Main {
             rooms.get(room1).timetable.set(timeslot1, activity1);
             rooms.get(room2).timetable.set(timeslot2, activity2);
             scoreValue = currentScore;
+            studentConflictCounter = currentStudentConflict;
+            capacityConflictCounter = currentCapacityConflict;
+            nightSlotPenaltyCount = currentNightslotPenalty;
         }
 
     }
