@@ -20,7 +20,7 @@ public class Main {
     public List<Activity> activities = new ArrayList<>();
     //public List<Timeslot> timeslots = new ArrayList<>();
 
-    ArrayList<Student> checkedStudentsList = new ArrayList<Student>();
+
 
     //Random number generator
     public Random intGenerator = new Random();
@@ -32,7 +32,7 @@ public class Main {
     public int timeslotsNight = 25;
     public int amountOfRooms;
     public int iterationsCounter = 0;
-    public int iterationsLimit = 1000;
+    public int iterationsLimit = 10000;
 
     public int studentConflictCounter;
     public int capacityConflictCounter;
@@ -66,6 +66,8 @@ public class Main {
         System.out.println("Nachtslot Maluspunten: "+nightSlotPenaltyCount);
         System.out.println(studentConflictCounter + " studenten zijn dubbel geroosterd!");
         System.out.println(capacityConflictCounter + " studenten passen niet in hun lokaal!");
+
+
 
         // Het valt op dat het algoritme het nachtslot toch vaak gebruikt, de kans dat hij een activity in een nachtslot
         // swapt met een timeslot dat niet in het nachtslot zit is:
@@ -260,26 +262,31 @@ public class Main {
 
 
         //Functie die rooster conflicten checkt
-
-
+        ArrayList<Student> checkedStudentsList = new ArrayList<Student>();
         studentConflictCounter = 0;
+        boolean conflictFound = false;
 
         for (int i = 0 ; i < timeslots ; i++){
-            for (Room room : rooms){
-                Activity activity = room.timetable.get(i);
+            for (int j = 0; j < rooms.size() - 1; j++){ //Want studenten uit het laatste lokaal hoeven nooit gecheckt te worden
+                Activity activity = rooms.get(j).timetable.get(i);
                 if (activity != null) {
                     for (Student student : activity.studentGroup) {
                         if (!checkedStudentsList.contains(student)) {
-                            for (Room otherRoom : rooms) {
+                            for (int k = j + 1; k < rooms.size(); k++) { // Want alleen lokalen onder de huidige hoeven gecheckt en het lokaal zelf ook niet
+                                Room otherRoom = rooms.get(k);
                                 Activity otherActivity = otherRoom.timetable.get(i);
-                                if (otherActivity != null && otherActivity != activity) {
+                                if (otherActivity != null) {
                                     if (otherActivity.studentGroup.contains(student)) {
                                         studentConflictCounter++;
+                                        conflictFound = true;
                                     }
                                 }
                             }
                         }
-                        checkedStudentsList.add(student);
+                        if (conflictFound){
+                            checkedStudentsList.add(student);
+                            conflictFound = false;
+                        }
                     }
                 }
             }
