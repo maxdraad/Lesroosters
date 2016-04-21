@@ -31,9 +31,12 @@ public class Main {
     public int timeslots = 20;
     public int timeslotsNight = 25;
     public int amountOfRooms;
+
     public int iterationsCounter = 0;
     public int iterationsLimit = 10000;
+    public List<Integer> scores = new ArrayList<>();
 
+    public int currentScore;
     public int studentConflictCounter;
     public int capacityConflictCounter;
     public int nightSlotPenaltyCount;
@@ -59,7 +62,12 @@ public class Main {
 
         while(iterationsCounter < iterationsLimit) {
             swapRandomActivities();
+            scores.add(currentScore);
             iterationsCounter++;
+            if (iterationsCounter % 1000 == 0){
+                System.out.println(scores);
+                scores.clear();
+            }
         }
 
         System.out.println("Score na " + iterationsLimit + " iteraties: " + scoreValue);
@@ -337,10 +345,11 @@ public class Main {
         int timeslot2 = intGenerator.nextInt(amountOfTimeslots2);
         Activity activity2 = rooms.get(room2).timetable.get(timeslot2);
 
-        int currentScore = scoreValue;
         int currentStudentConflict = studentConflictCounter;
         int currentCapacityConflict = capacityConflictCounter;
         int currentNightslotPenalty = nightSlotPenaltyCount;
+
+        currentScore = scoreValue;
 
         rooms.get(room1).timetable.set(timeslot1, activity2);
         rooms.get(room2).timetable.set(timeslot2, activity1);
