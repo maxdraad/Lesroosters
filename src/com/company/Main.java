@@ -32,7 +32,7 @@ public class Main {
     public int timeslotsNight = 25;
     public int amountOfRooms;
     public int iterationsCounter = 0;
-    public int iterationsLimit = 10000;
+    public int iterationsLimit = 20000;
 
     public int studentConflictCounter;
     public int capacityConflictCounter;
@@ -52,7 +52,7 @@ public class Main {
         makeRandomSchedule();
         computeScore();
 
-        System.out.println("Nachtslot Maluspunten: "+nightSlotPenaltyCount);
+        System.out.println("Nachtslot Maluspunten: " + nightSlotPenaltyCount);
         System.out.println(studentConflictCounter + " studenten zijn dubbel geroosterd!");
         System.out.println(capacityConflictCounter + " studenten passen niet in hun lokaal!");
         System.out.println("Totale score: " + scoreValue);
@@ -62,8 +62,8 @@ public class Main {
             iterationsCounter++;
         }
 
-        System.out.println("Score na "+iterationsLimit+" iteraties: "+scoreValue);
-        System.out.println("Nachtslot Maluspunten: "+nightSlotPenaltyCount);
+        System.out.println("Score na " + iterationsLimit + " iteraties: " + scoreValue);
+        System.out.println("Nachtslot Maluspunten: " + nightSlotPenaltyCount);
         System.out.println(studentConflictCounter + " studenten zijn dubbel geroosterd!");
         System.out.println(capacityConflictCounter + " studenten passen niet in hun lokaal!");
 
@@ -319,8 +319,9 @@ public class Main {
             }
         }
 
-        scoreValue = scoreValue - capacityConflictCounter - studentConflictCounter - nightSlotPenaltyCount;
 
+
+        scoreValue = scoreValue - capacityConflictCounter - studentConflictCounter - nightSlotPenaltyCount;
 
 
     }
@@ -345,6 +346,7 @@ public class Main {
         if (scoreValue <= currentScore){
             rooms.get(room1).timetable.set(timeslot1, activity1);
             rooms.get(room2).timetable.set(timeslot2, activity2);
+            scoreValue = currentScore;
         }
 
     }
