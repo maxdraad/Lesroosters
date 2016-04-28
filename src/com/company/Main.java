@@ -18,8 +18,6 @@ public class Main {
     public List<Activity> activities = new ArrayList<>();
     //public List<Timeslot> timeslots = new ArrayList<>();
 
-
-
     //Random number generator
     public Random intGenerator = new Random();
 
