@@ -1,8 +1,6 @@
 package com.company;
 
-import java.io.BufferedReader;
-import java.io.FileReader;
-import java.io.IOException;
+import java.io.*;
 import java.util.*;
 
 
@@ -41,6 +39,7 @@ public class Main {
     public int capacityConflictCounter;
     public int nightSlotPenaltyCount;
 
+    public FileWriter fw;
 
     public static void main(String[] args) {
         new Main().go();
@@ -60,12 +59,29 @@ public class Main {
         System.out.println(capacityConflictCounter + " studenten passen niet in hun lokaal!");
         System.out.println("Totale score: " + scoreValue);
 
+        /*try{
+            fw = new FileWriter(new File("Test.txt"));
+            fw.close();
+        } catch (IOException ex) {
+            System.out.println("Something went wrong");
+        }*/
         while(iterationsCounter < iterationsLimit) {
             swapRandomActivities();
             scores.add(currentScore);
             iterationsCounter++;
             if (iterationsCounter % 1000 == 0){
                 System.out.println(scores);
+                try {
+                    FileWriter fw = new FileWriter("Test.txt", true);
+                    BufferedWriter bw = new BufferedWriter(fw);
+                    PrintWriter out = new PrintWriter(bw);
+                    for(int i = 0; i < 1000; i++){
+                        out.println(scores.get(i).toString());
+                    }
+                    out.close();
+                }catch (IOException ex){
+                    System.out.println("Something went wrong");
+                }
                 scores.clear();
             }
         }
