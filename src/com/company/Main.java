@@ -6,22 +6,24 @@ import java.util.*;
 
 public class Main {
 
-    //Om printout tekst in kleur te krijgen
-//    public static final String ANSI_RED = "\u001B[31m";
-    //En weer zwart te maken
-//    public static final String ANSI_RESET = "\u001B[0m";
+    /*
+    Om printout tekst in kleur te krijgen
+    public static final String ANSI_RED = "\u001B[31m";
+    En weer zwart te maken
+    public static final String ANSI_RESET = "\u001B[0m";
+    */
 
     // ArrayList to keep al courses, rooms and students and their information
     public List<Course> courses = new ArrayList<>();
     public List<Room> rooms = new ArrayList<>();
     public List<Student> students = new ArrayList<>();
     public List<Activity> activities = new ArrayList<>();
-    //public List<Timeslot> timeslots = new ArrayList<>();
+    // public List<Timeslot> timeslots = new ArrayList<>();
 
-    //Random number generator
+    // Random number generator
     public Random intGenerator = new Random();
 
-    //Score keeper
+    // Score keeper
     public int scoreValue;
 
     public int timeslots = 20;
@@ -29,15 +31,14 @@ public class Main {
     public int amountOfRooms;
 
     public int iterationsCounter = 0;
-    public int iterationsLimit = 10000;
+    public int iterationsLimit = 100000;
+    public int fileNumber = 1;
     public List<Integer> scores = new ArrayList<>();
 
     public int currentScore;
     public int studentConflictCounter;
     public int capacityConflictCounter;
     public int nightSlotPenaltyCount;
-
-    public FileWriter fw;
 
     public static void main(String[] args) {
         new Main().go();
@@ -48,54 +49,34 @@ public class Main {
         getCourses();
         getRooms();
         getStudents();
+
         makeActivities();
         makeRandomSchedule();
+
         computeScore();
 
-        System.out.println("Nachtslot Maluspunten: " + nightSlotPenaltyCount);
+        /*System.out.println("Nachtslot Maluspunten: " + nightSlotPenaltyCount);
         System.out.println(studentConflictCounter + " studenten zijn dubbel geroosterd!");
         System.out.println(capacityConflictCounter + " studenten passen niet in hun lokaal!");
-        System.out.println("Totale score: " + scoreValue);
+        System.out.println("Totale score: " + scoreValue);*/
 
-        /*try{
-            fw = new FileWriter(new File("Test.txt"));
-            fw.close();
-        } catch (IOException ex) {
-            System.out.println("Something went wrong");
+        hillClimber();
+
+        /*//Print alle Activities met bijbehorende studentnummers van studenten
+        for (int i = 0; i < activities.size(); i++) {
+
+           System.out.println(activities.get(i).course.name + " | Aantal " + activities.get(i).activity + ": " +
+           activities.get(i).occurrence + " | Groep: " + activities.get(i).groupNumber + " | Aantal studenten: " +
+                   activities.get(i).studentGroup.size());
         }*/
-        while(iterationsCounter < iterationsLimit) {
-            swapRandomActivities();
-            scores.add(currentScore);
-            iterationsCounter++;
-            if (iterationsCounter % 1000 == 0){
-                System.out.println(scores);
-                try {
-                    FileWriter fw = new FileWriter("Test.txt", true);
-                    BufferedWriter bw = new BufferedWriter(fw);
-                    PrintWriter out = new PrintWriter(bw);
-                    for(int i = 0; i < 1000; i++){
-                        out.println(scores.get(i).toString());
-                    }
-                    out.close();
-                }catch (IOException ex){
-                    System.out.println("Something went wrong");
-                }
-                scores.clear();
-            }
-        }
 
-        System.out.println("Score na " + iterationsLimit + " iteraties: " + scoreValue);
-        System.out.println("Nachtslot Maluspunten: " + nightSlotPenaltyCount);
-        System.out.println(studentConflictCounter + " studenten zijn dubbel geroosterd!");
-        System.out.println(capacityConflictCounter + " studenten passen niet in hun lokaal!");
-
-
-        // Het valt op dat het algoritme het nachtslot toch vaak gebruikt, de kans dat hij een activity in een nachtslot
-        // swapt met een timeslot dat niet in het nachtslot zit is:
-        // (5/145)*(140/145)*(16/145) = 0.00367378736 = 0.367378736%
-        //  1.00367378736 log (1.5) = 110.56966814, dus er is op 111 interaties een 50% kans voor zo'n swap.
-        // Blijkbaar is het nuttig het avondslot te gebruiken
-
+        /*
+        Het valt op dat het algoritme het nachtslot toch vaak gebruikt, de kans dat hij een activity in een nachtslot
+        swapt met een timeslot dat niet in het nachtslot zit is:
+        (5/145)*(140/145)*(16/145) = 0.00367378736 = 0.367378736%
+        1.00367378736 log (1.5) = 110.56966814, dus er is op 111 interaties een 50% kans voor zo'n swap.
+        Blijkbaar is het nuttig het avondslot te gebruiken
+        */
     }
 
     // Read all courses from file and define their features
@@ -194,7 +175,7 @@ public class Main {
         }
     }
 
-    /* public void makeTimeslots(){
+    {/* public void makeTimeslots(){
         //Maakt 5 timeslots aan//
         for(int i = 1; i<= 5; i++){
             for (int j = 1; j <= 5; j++) {
@@ -203,7 +184,7 @@ public class Main {
             }
         }
     }
-    */
+    */}
 
     public void makeActivities(){
         //For loop die activities aanmaakt
@@ -235,7 +216,7 @@ public class Main {
         }
         */
 
-        System.out.println("Aantal Activities: " + activities.size());
+        //System.out.println("Aantal Activities: " + activities.size());
     }
 
     public void makeRandomSchedule(){
@@ -257,12 +238,22 @@ public class Main {
                 Thread.currentThread().interrupt();
             }*/
         }
-        for (Room room : rooms) System.out.println(room.name + "  " + room.nightSlot + " " + room.timetable);
+        //for (Room room : rooms) System.out.println(room.name + "  " + room.nightSlot + " " + room.timetable);
 
     }
 
     public void computeScore(){
 
+        computeActivityScore();
+        computeStudentConflicts();
+        computeCapacityConflicts();
+        computeNightslotPenalty();
+        computeDistribution();
+
+        scoreValue = scoreValue - capacityConflictCounter - studentConflictCounter - nightSlotPenaltyCount;
+    }
+
+    public void computeActivityScore(){
         int activityCounter = 0;
         for (Activity activity : activities){
             for (Room room : rooms){
@@ -280,8 +271,9 @@ public class Main {
             //System.out.println("0 punten, niet alle activities zijn ingeroosterd");
             scoreValue = 0;
         }
+    }
 
-
+    public void computeStudentConflicts(){
         //Functie die rooster conflicten checkt
         ArrayList<Student> checkedStudentsList = new ArrayList<Student>();
         studentConflictCounter = 0;
@@ -313,8 +305,9 @@ public class Main {
             }
             checkedStudentsList.clear();
         }
+    }
 
-
+    public void computeCapacityConflicts(){
         // Functie die capacatiteit conflicten checkt
         capacityConflictCounter = 0;
         for (Room room : rooms){
@@ -327,7 +320,9 @@ public class Main {
                 }
             }
         }
+    }
 
+    public void computeNightslotPenalty(){
         nightSlotPenaltyCount = 0;
         // Checkt gebruik van avondslot
         for (Room room: rooms){
@@ -339,12 +334,41 @@ public class Main {
                 }
             }
         }
+    }
 
+    public void computeDistribution(){
 
+    }
 
-        scoreValue = scoreValue - capacityConflictCounter - studentConflictCounter - nightSlotPenaltyCount;
+    public void hillClimber(){
+        while(iterationsCounter < iterationsLimit) {
+            swapRandomActivities();
+            scores.add(currentScore);
+            iterationsCounter++;
+            if (iterationsCounter % 1000 == 0){
+                //System.out.println(scores);
+                try {
+                    FileWriter fw = new FileWriter("File" + fileNumber + ".txt", true);
+                    BufferedWriter bw = new BufferedWriter(fw);
+                    PrintWriter out = new PrintWriter(bw);
+                    for(int i = 0; i < 1000; i++){
+                        out.println(scores.get(i).toString());
+                    }
+                    out.close();
+                }catch (IOException ex){
+                    System.out.println("Something went wrong");
+                }
+                scores.clear();
+            }
+            if (iterationsCounter % 10000 == 0){
+                fileNumber++;
+            }
+        }
 
-
+        System.out.println("Score na " + iterationsLimit + " iteraties: " + scoreValue);
+        System.out.println("Nachtslot Maluspunten: " + nightSlotPenaltyCount);
+        System.out.println(studentConflictCounter + " studenten zijn dubbel geroosterd!");
+        System.out.println(capacityConflictCounter + " studenten passen niet in hun lokaal!");
     }
 
     // Hill climbing swapactivities
