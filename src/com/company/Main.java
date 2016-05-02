@@ -60,7 +60,7 @@ public class Main {
         System.out.println(capacityConflictCounter + " studenten passen niet in hun lokaal!");
         System.out.println("Totale score: " + scoreValue);*/
 
-        hillClimber();
+        //hillClimber();
 
         /*//Print alle Activities met bijbehorende studentnummers van studenten
         for (int i = 0; i < activities.size(); i++) {
@@ -279,7 +279,7 @@ public class Main {
         studentConflictCounter = 0;
         boolean conflictFound = false;
 
-        for (int i = 0 ; i < timeslots ; i++){
+        for (int i = 0 ; i < timeslots ; i++){      // !! timeslots vs timeslotsNight?
             for (int j = 0; j < rooms.size() - 1; j++){ //Want studenten uit het laatste lokaal hoeven nooit gecheckt te worden
                 Activity activity = rooms.get(j).timetable.get(i);
                 if (activity != null) {
@@ -337,7 +337,27 @@ public class Main {
     }
 
     public void computeDistribution(){
+        for (int i = 0; i < courses.size(); i++){
+            Course course = courses.get(i);
+            for(int j = 0; j < timeslots; j++){     //Timeslots vs timeslotsNight
+                for(int k = 0; j < rooms.size(); k++) {
+                    Activity activity = rooms.get(j).timetable.get(i);
+                    if(activity.course == course){
 
+                    }
+                }
+            }
+        }
+
+        /*for (int i = 0; i < timeslots; i++){
+            for(int j = 0; j < rooms.size() - 1; j++){
+                Activity activity = rooms.get(j).timetable.get(i);
+                if(activity != null){
+                    Course course = activity.course;
+                    System.out.println(activity.activity);
+                }
+            }
+        }*/
     }
 
     public void hillClimber(){
