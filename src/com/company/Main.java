@@ -343,7 +343,7 @@ public class Main {
                 for(int k = 0; j < rooms.size(); k++) {
                     Activity activity = rooms.get(j).timetable.get(i);
                     if(activity.course == course){
-
+                        // Reken verder met waarde i, is een bepaalde tijd op een bepaalde dag
                     }
                 }
             }
