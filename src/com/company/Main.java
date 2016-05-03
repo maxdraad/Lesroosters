@@ -97,7 +97,8 @@ public class Main {
 
                 List<Student> courseStudents = new ArrayList<Student>();
 
-                Course newCourse = new Course(name, numberLectures, numberWorkgroups, maxStudentsGroups, numberPracticum, maxStudentsPracticum, courseStudents);
+                Course newCourse = new Course(name, numberLectures, numberWorkgroups, maxStudentsGroups,
+                        numberPracticum, maxStudentsPracticum, courseStudents);
                 courses.add(newCourse);
             }
             csvVakkenGegevens.close();
@@ -339,11 +340,15 @@ public class Main {
     public void computeDistribution(){
         for (int i = 0; i < courses.size(); i++){
             Course course = courses.get(i);
+
             for(int j = 0; j < timeslots; j++){     //Timeslots vs timeslotsNight
-                for(int k = 0; j < rooms.size(); k++) {
-                    Activity activity = rooms.get(j).timetable.get(i);
-                    if(activity.course == course){
-                        // Reken verder met waarde i, is een bepaalde tijd op een bepaalde dag
+                for(int k = 0; k < rooms.size(); k++) {
+                    Activity activity = rooms.get(k).timetable.get(j);
+                    if(activity != null){
+                        if(activity.course == course) {
+                            // Reken verder met waarde j, is een bepaalde tijd op een bepaalde dag
+
+                        }
                     }
                 }
             }
