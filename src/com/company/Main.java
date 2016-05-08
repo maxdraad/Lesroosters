@@ -39,6 +39,7 @@ public class Main {
     public int studentConflictCounter;
     public int capacityConflictCounter;
     public int nightSlotPenaltyCount;
+    public int distributionPoints;
 
     public static void main(String[] args) {
         new Main().go();
@@ -232,7 +233,7 @@ public class Main {
                 j = intGenerator.nextInt(amountOfTimeslots);
             }
             rooms.get(i).timetable.set(j, activity);
-            /*System.out.println(activities.get(x).course.name+ " " + activities.get(x).activity + " ingedeeld in lokaal " + rooms.get(i).name + ", timeslot " + j );
+            /*System.out.println(activities.get(i).course.name+ " " + activities.get(i).activity + " ingedeeld in lokaal " + rooms.get(i).name + ", timeslot " + j );
               try {
                 Thread.sleep(100);                 //1000 milliseconds is one second.
             } catch(InterruptedException ex) {
@@ -249,9 +250,10 @@ public class Main {
         computeStudentConflicts();
         computeCapacityConflicts();
         computeNightslotPenalty();
-        //computeDistribution();
+        computeDistribution();
 
-        scoreValue = scoreValue - capacityConflictCounter - studentConflictCounter - nightSlotPenaltyCount;
+        scoreValue = scoreValue - capacityConflictCounter - studentConflictCounter
+                - nightSlotPenaltyCount + distributionPoints;
     }
 
     public void computeActivityScore(){
@@ -338,11 +340,11 @@ public class Main {
     }
 
     public void computeDistribution(){
-        int distributionPoints = 0;
+        distributionPoints = 0;
         for (int i = 0; i < courses.size(); i++){
-            Course course = courses.get(i);
-            List<List> workgroupWeeks = new ArrayList<>();
-            for (int r = 0; r < 5; r++) {                               // Hardcoded
+            Course course = courses.get(0);
+            List<List<Boolean>> workgroupWeeks = new ArrayList<>();
+            for (int r = 0; r < 6; r++) {                               // Hardcoded
                 List<Boolean> weekDistribution = new ArrayList<>();
                 for (int s = 0; s < 5; s++) {
                     weekDistribution.add(false);
@@ -352,19 +354,37 @@ public class Main {
             int distributionMalus = 0;
             int distributionBonus = 0;
 
+            // Weekverdeling malus
             for(int j = 0; j < timeslots; j++){     //Timeslots vs timeslotsNight
                 for(int k = 0; k < rooms.size(); k++) {
                     Activity activity = rooms.get(k).timetable.get(j);
                     if(activity != null){
                         if(activity.course == course) {
-                            // Reken verder met waarde j, is een bepaalde tijd op een bepaalde dag
-                            // Verschillende werkgroepen implenteren.
-                            int day = 0;
-                            getDay(j, day);
+                            int day;
+                            switch (j){
+                                case 0:case 1:case 2:case 3:case 20:
+                                    day = 0;
+                                    break;
+                                case 4:case 5:case 6:case 7:case 21:
+                                    day = 1;
+                                    break;
+                                case 8:case 9:case 10:case 11:case 22:
+                                    day = 2;
+                                    break;
+                                case 12:case 13:case 14:case 15:case 23:
+                                    day = 3;
+                                    break;
+                                case 16:case 17:case 18:case 19:case 24:
+                                    day = 4;
+                                    break;
+                                default:
+                                    day = 0;
+                                    break;
+                            }
 
                             if (activity.activity == "Hoorcollege"){
-                                for(int l = 0; l < 5; l++){             // Hardcoded
-                                    if (workgroupWeeks.get(l).get(day) == "false"){
+                                for(int l = 0; l < 6; l++){             // Hardcoded
+                                    if (!workgroupWeeks.get(l).get(day)){
                                         workgroupWeeks.get(l).set(day, true);
                                     }
                                     else{
@@ -373,8 +393,8 @@ public class Main {
                                 }
                             }
                             else{
-                                int workgroup = activity.groupNumber;
-                                if (workgroupWeeks.get(workgroup).get(day) == "false") {
+                                int workgroup = activity.groupNumber - 1;
+                                if (!workgroupWeeks.get(workgroup).get(day)) {
                                     workgroupWeeks.get(workgroup).set(day, true);
                                 }
                                 else{
@@ -384,11 +404,28 @@ public class Main {
                         }
                     }
                 }
-                //System.out.println(workgroupWeeks);
-                distributionPoints = distributionPoints + distributionBonus - distributionMalus;
+            }
+            System.out.println(workgroupWeeks);
+
+            // Weekverdeling bonus
+            int numberOfGroups = 0;
+
+            for (int j = 0; j < 6; j++) {
+                int numberOfActivities = course.numberLectures + course.numberWorkGroups + course.numberPracticum;
+                List<Boolean> check = workgroupWeeks.get(j);
+                if (check.contains(true)) {
+                    numberOfGroups++;
+                } else {
+
+                }
             }
 
+            System.out.println(numberOfGroups);
+
+            distributionPoints = distributionPoints + distributionBonus - distributionMalus;
         }
+
+        System.out.println(distributionPoints);
 
         /*for (int i = 0; i < timeslots; i++){
             for(int j = 0; j < rooms.size() - 1; j++){
@@ -462,10 +499,6 @@ public class Main {
             nightSlotPenaltyCount = currentNightslotPenalty;
         }
 
-    }
-
-    public void getDay(int j, int day){
-        // case and switch
     }
 
     //Method om activities mee te maken
