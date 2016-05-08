@@ -249,7 +249,7 @@ public class Main {
         computeStudentConflicts();
         computeCapacityConflicts();
         computeNightslotPenalty();
-        computeDistribution();
+        //computeDistribution();
 
         scoreValue = scoreValue - capacityConflictCounter - studentConflictCounter - nightSlotPenaltyCount;
     }
@@ -338,8 +338,19 @@ public class Main {
     }
 
     public void computeDistribution(){
+        int distributionPoints = 0;
         for (int i = 0; i < courses.size(); i++){
             Course course = courses.get(i);
+            List<List> workgroupWeeks = new ArrayList<>();
+            for (int r = 0; r < 5; r++) {                               // Hardcoded
+                List<Boolean> weekDistribution = new ArrayList<>();
+                for (int s = 0; s < 5; s++) {
+                    weekDistribution.add(false);
+                }
+                workgroupWeeks.add(weekDistribution);
+            }
+            int distributionMalus = 0;
+            int distributionBonus = 0;
 
             for(int j = 0; j < timeslots; j++){     //Timeslots vs timeslotsNight
                 for(int k = 0; k < rooms.size(); k++) {
@@ -347,11 +358,36 @@ public class Main {
                     if(activity != null){
                         if(activity.course == course) {
                             // Reken verder met waarde j, is een bepaalde tijd op een bepaalde dag
+                            // Verschillende werkgroepen implenteren.
+                            int day = 0;
+                            getDay(j, day);
 
+                            if (activity.activity == "Hoorcollege"){
+                                for(int l = 0; l < 5; l++){             // Hardcoded
+                                    if (workgroupWeeks.get(l).get(day) == "false"){
+                                        workgroupWeeks.get(l).set(day, true);
+                                    }
+                                    else{
+                                        distributionMalus++;
+                                    }
+                                }
+                            }
+                            else{
+                                int workgroup = activity.groupNumber;
+                                if (workgroupWeeks.get(workgroup).get(day) == "false") {
+                                    workgroupWeeks.get(workgroup).set(day, true);
+                                }
+                                else{
+                                    distributionMalus++;
+                                }
+                            }
                         }
                     }
                 }
+                //System.out.println(workgroupWeeks);
+                distributionPoints = distributionPoints + distributionBonus - distributionMalus;
             }
+
         }
 
         /*for (int i = 0; i < timeslots; i++){
@@ -426,6 +462,10 @@ public class Main {
             nightSlotPenaltyCount = currentNightslotPenalty;
         }
 
+    }
+
+    public void getDay(int j, int day){
+        // case and switch
     }
 
     //Method om activities mee te maken
