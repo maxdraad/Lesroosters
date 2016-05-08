@@ -99,7 +99,7 @@ public class Main {
                 List<Student> courseStudents = new ArrayList<Student>();
 
                 Course newCourse = new Course(name, numberLectures, numberWorkgroups, maxStudentsGroups,
-                        numberPracticum, maxStudentsPracticum, courseStudents);
+                        numberPracticum, maxStudentsPracticum, courseStudents, 1);
                 courses.add(newCourse);
             }
             csvVakkenGegevens.close();
@@ -342,9 +342,9 @@ public class Main {
     public void computeDistribution(){
         distributionPoints = 0;
         for (int i = 0; i < courses.size(); i++){
-            Course course = courses.get(0);
+            Course course = courses.get(i);
             List<List<Boolean>> workgroupWeeks = new ArrayList<>();
-            for (int r = 0; r < 6; r++) {                               // Hardcoded
+            for (int r = 0; r < course.numberOfGroups; r++) {
                 List<Boolean> weekDistribution = new ArrayList<>();
                 for (int s = 0; s < 5; s++) {
                     weekDistribution.add(false);
@@ -383,7 +383,7 @@ public class Main {
                             }
 
                             if (activity.activity == "Hoorcollege"){
-                                for(int l = 0; l < 6; l++){             // Hardcoded
+                                for(int l = 0; l < course.numberOfGroups; l++){
                                     if (!workgroupWeeks.get(l).get(day)){
                                         workgroupWeeks.get(l).set(day, true);
                                     }
@@ -408,19 +408,12 @@ public class Main {
             System.out.println(workgroupWeeks);
 
             // Weekverdeling bonus
-            int numberOfGroups = 0;
-
-            for (int j = 0; j < 6; j++) {
+            for (int j = 0; j < course.numberOfGroups; j++) {
                 int numberOfActivities = course.numberLectures + course.numberWorkGroups + course.numberPracticum;
                 List<Boolean> check = workgroupWeeks.get(j);
-                if (check.contains(true)) {
-                    numberOfGroups++;
-                } else {
-
-                }
             }
 
-            System.out.println(numberOfGroups);
+            System.out.println(course.numberOfGroups);
 
             distributionPoints = distributionPoints + distributionBonus - distributionMalus;
         }
@@ -511,6 +504,7 @@ public class Main {
                 // Verdeelt studenten over groepen als er meer studenten zijn dan capaciteit van 1 (werk)groep
                 if (course.courseStudents.size() > maxNumberStudents) {
                     int numberGroups = (int) Math.ceil(((double) course.courseStudents.size()) / ((double) maxNumberStudents));
+                    course.numberOfGroups = numberGroups;
                     int j;
                     for (j = 1; j < numberGroups; j++) {
                         List<Student> studentsWorkGroup = course.courseStudents.subList((j - 1) * maxNumberStudents, j * maxNumberStudents);

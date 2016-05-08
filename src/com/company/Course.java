@@ -10,9 +10,11 @@ public class Course {
     public int numberPracticum;
     public int maxStudentsPracticum;
     public List<Student> courseStudents;
+    public int numberOfGroups;
 
 
-    public Course(String name, int numberLectures, int numberWorkGroups, int maxStudentsGroups, int numberPracticum, int maxStudentsPracticum, List<Student> courseStudents){
+    public Course(String name, int numberLectures, int numberWorkGroups, int maxStudentsGroups,
+                  int numberPracticum, int maxStudentsPracticum, List<Student> courseStudents, int numberOfGroups){
         this.name = name;
         this.numberLectures = numberLectures;
         this.courseStudents = courseStudents;
@@ -20,6 +22,7 @@ public class Course {
         this.maxStudentsGroups = maxStudentsGroups;
         this.numberPracticum = numberPracticum;
         this.maxStudentsPracticum = maxStudentsPracticum;
+        this.numberOfGroups = numberOfGroups;
     }
 
     public String toString() {
