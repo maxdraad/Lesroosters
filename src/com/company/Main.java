@@ -31,7 +31,7 @@ public class Main {
     public int amountOfRooms;
 
     public int iterationsCounter = 0;
-    public int iterationsLimit = 100000;
+    public int iterationsLimit = 10000;
     public int fileNumber = 1;
     public List<Integer> scores = new ArrayList<>();
 
@@ -56,12 +56,12 @@ public class Main {
 
         computeScore();
 
-        /*System.out.println("Nachtslot Maluspunten: " + nightSlotPenaltyCount);
+        System.out.println("Nachtslot Maluspunten: " + nightSlotPenaltyCount);
         System.out.println(studentConflictCounter + " studenten zijn dubbel geroosterd!");
         System.out.println(capacityConflictCounter + " studenten passen niet in hun lokaal!");
-        System.out.println("Totale score: " + scoreValue);*/
+        System.out.println("Totale score: " + scoreValue);
 
-        //hillClimber();
+        hillClimber();
 
         /*//Print alle Activities met bijbehorende studentnummers van studenten
         for (int i = 0; i < activities.size(); i++) {
@@ -405,30 +405,75 @@ public class Main {
                     }
                 }
             }
-            System.out.println(workgroupWeeks);
+            //System.out.println(workgroupWeeks);
 
             // Weekverdeling bonus
             for (int j = 0; j < course.numberOfGroups; j++) {
                 int numberOfActivities = course.numberLectures + course.numberWorkGroups + course.numberPracticum;
                 List<Boolean> check = workgroupWeeks.get(j);
+                int bonus = 0;
+                switch (numberOfActivities){
+                    case 1:
+                        bonus = 1;
+                        break;
+                    case 2:
+                        if((check.get(0) && check.get(4)) || (check.get(0) && check.get(3)) || (check.get(1) && check.get(4))){
+                            bonus = 1;
+                        }
+                        break;
+                    case 3:
+                        if(check.get(0) && check.get(2) && check.get(4)){
+                            bonus = 1;
+                        }
+                        break;
+                    case 4:
+                        if(check.get(0) && check.get(1) && check.get(3) && check.get(4)){
+                            bonus = 1;
+                        }
+                        break;
+                    default:
+                        bonus = 1;
+                        break;
+                }
+                distributionBonus += bonus;
+            }
+            int factorMalus;
+            int factorBonus;
+            switch (course.numberOfGroups){     //hardcoded
+                case 1:
+                    factorMalus = 10;
+                    factorBonus = 20;
+                    break;
+                case 2:
+                    factorMalus = 5;
+                    factorBonus = 10;
+                    break;
+                case 3:
+                    factorMalus = 3;
+                    factorBonus = 7;
+                    break;
+                case 4:
+                    factorMalus = 3;
+                    factorBonus = 5;
+                    break;
+                case 5:
+                    factorMalus = 2;
+                    factorBonus = 4;
+                    break;
+                case 6:
+                    factorMalus = 1;
+                    factorBonus = 3;
+                    break;
+                default:
+                    factorMalus = 1;
+                    factorBonus = 1;
+                    break;
             }
 
-            System.out.println(course.numberOfGroups);
-
-            distributionPoints = distributionPoints + distributionBonus - distributionMalus;
+            distributionPoints = distributionPoints + distributionBonus * factorBonus - distributionMalus * factorMalus;
         }
 
-        System.out.println(distributionPoints);
-
-        /*for (int i = 0; i < timeslots; i++){
-            for(int j = 0; j < rooms.size() - 1; j++){
-                Activity activity = rooms.get(j).timetable.get(i);
-                if(activity != null){
-                    Course course = activity.course;
-                    System.out.println(activity.activity);
-                }
-            }
-        }*/
+        //System.out.println(distributionPoints);
     }
 
     public void hillClimber(){
