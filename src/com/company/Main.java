@@ -355,8 +355,11 @@ public class Main {
             int distributionBonus = 0;
 
             // Weekverdeling malus
-            for(int j = 0; j < timeslots; j++){     //Timeslots vs timeslotsNight
+            for(int j = 0; j < timeslotsNight; j++){     //Timeslots vs timeslotsNight
                 for(int k = 0; k < rooms.size(); k++) {
+                    if (!rooms.get(k).nightSlot && j >= timeslots){
+                        break;
+                    }
                     Activity activity = rooms.get(k).timetable.get(j);
                     if(activity != null){
                         if(activity.course == course) {
@@ -403,6 +406,9 @@ public class Main {
                             }
                         }
                     }
+                    /*if(timeslotsPerWeek == timeslotsNight){
+                        timeslotsPerWeek = timeslots;
+                    }*/
                 }
             }
             //System.out.println(workgroupWeeks);
@@ -481,13 +487,13 @@ public class Main {
             swapRandomActivities();
             scores.add(currentScore);
             iterationsCounter++;
-            if (iterationsCounter % 1000 == 0){
+            if (iterationsCounter % 10000 == 0){
                 //System.out.println(scores);
                 try {
                     FileWriter fw = new FileWriter("File" + fileNumber + ".txt", true);
                     BufferedWriter bw = new BufferedWriter(fw);
                     PrintWriter out = new PrintWriter(bw);
-                    for(int i = 0; i < 1000; i++){
+                    for(int i = 0; i < 10000; i++){
                         out.println(scores.get(i).toString());
                     }
                     out.close();
