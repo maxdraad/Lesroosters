@@ -52,7 +52,31 @@ public class Main {
         getStudents();
 
         makeActivities();
-        makeRandomSchedule();
+
+        //Scorefunctietest
+
+        Activity test1 = activities.get(0);
+        Activity test2 = activities.get(1);
+        Activity test3 = activities.get(2);
+
+        for (int i = 0; i < activities.size(); i++) {
+            System.out.println(i + ": " + activities.get(i).course.name + " | Aantal " + activities.get(i).activity + ": " +
+                    activities.get(i).occurrence + " | Groep: " + activities.get(i).groupNumber + " | Aantal studenten: " +
+                    activities.get(i).studentGroup.size());
+        }
+
+        /*
+        rooms.get(1).timetable.set(1, test1);
+        rooms.get(3).timetable.set(1, test2);
+        rooms.get(2).timetable.set(1, test3);
+        */
+
+
+
+
+        //Einde scorefunctietest
+
+        //makeRandomSchedule();
 
         computeScore();
 
@@ -60,24 +84,12 @@ public class Main {
         System.out.println(studentConflictCounter + " studenten zijn dubbel geroosterd!");
         System.out.println(capacityConflictCounter + " studenten passen niet in hun lokaal!");
         System.out.println("Totale score: " + scoreValue);
-
+        System.out.println("Aantal activities: "+activities.size());
         hillClimber();
 
-        /*//Print alle Activities met bijbehorende studentnummers van studenten
-        for (int i = 0; i < activities.size(); i++) {
 
-           System.out.println(activities.get(i).course.name + " | Aantal " + activities.get(i).activity + ": " +
-           activities.get(i).occurrence + " | Groep: " + activities.get(i).groupNumber + " | Aantal studenten: " +
-                   activities.get(i).studentGroup.size());
-        }*/
 
-        /*
-        Het valt op dat het algoritme het nachtslot toch vaak gebruikt, de kans dat hij een activity in een nachtslot
-        swapt met een timeslot dat niet in het nachtslot zit is:
-        (5/145)*(140/145)*(16/145) = 0.00367378736 = 0.367378736%
-        1.00367378736 log (1.5) = 110.56966814, dus er is op 111 interaties een 50% kans voor zo'n swap.
-        Blijkbaar is het nuttig het avondslot te gebruiken
-        */
+
     }
 
     // Read all courses from file and define their features
@@ -159,6 +171,7 @@ public class Main {
 
                 //Instantiation of variable with list of Course belonging to student
                 List<String> studentCourses = gegevens.subList(3, gegevens.size());
+                List<Activity> studentActivities = new ArrayList<>();
 
                 Student newStudent = new Student(lastName, firstName, studentNumber, studentCourses);
                 students.add(newStudent);
@@ -341,8 +354,7 @@ public class Main {
 
     public void computeDistribution(){
         distributionPoints = 0;
-        for (int i = 0; i < courses.size(); i++){
-            Course course = courses.get(i);
+        for (Course course: courses){
             List<List<Boolean>> workgroupWeeks = new ArrayList<>();
             for (int r = 0; r < course.numberOfGroups; r++) {
                 List<Boolean> weekDistribution = new ArrayList<>();
@@ -438,7 +450,7 @@ public class Main {
                         }
                         break;
                     default:
-                        bonus = 1;
+                        bonus = 0;
                         break;
                 }
                 distributionBonus += bonus;
@@ -476,7 +488,7 @@ public class Main {
                     break;
             }
 
-            distributionPoints = distributionPoints + distributionBonus * factorBonus - distributionMalus * factorMalus;
+            distributionPoints = distributionPoints + (distributionBonus * factorBonus) - (distributionMalus * factorMalus);
         }
 
         //System.out.println(distributionPoints);
@@ -555,16 +567,17 @@ public class Main {
                 // Verdeelt studenten over groepen als er meer studenten zijn dan capaciteit van 1 (werk)groep
                 if (course.courseStudents.size() > maxNumberStudents) {
                     int numberGroups = (int) Math.ceil(((double) course.courseStudents.size()) / ((double) maxNumberStudents));
+                    int numberStudentsGroup = (int) Math.ceil(((double) course.courseStudents.size()) / ((double) numberGroups));
+
                     course.numberOfGroups = numberGroups;
                     int j;
                     for (j = 1; j < numberGroups; j++) {
-                        List<Student> studentsWorkGroup = course.courseStudents.subList((j - 1) * maxNumberStudents, j * maxNumberStudents);
-
-
+                        //List<Student> studentsWorkGroup = course.courseStudents.subList((j - 1) * maxNumberStudents, j * maxNumberStudents);
+                        List<Student> studentsWorkGroup = course.courseStudents.subList((j - 1) * numberStudentsGroup, j * numberStudentsGroup);
                         Activity workGroup = new Activity(course, nameLectureType, i, j, studentsWorkGroup);
                         activities.add(workGroup);
                     }
-                    List<Student> studentsWorkGroup = course.courseStudents.subList(maxNumberStudents * (j - 1), course.courseStudents.size());
+                    List<Student> studentsWorkGroup = course.courseStudents.subList(numberStudentsGroup * (j - 1), course.courseStudents.size());
                     Activity workGroup = new Activity(course, nameLectureType, i, j, studentsWorkGroup);
                     activities.add(workGroup);
 
