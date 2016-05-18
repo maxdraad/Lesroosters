@@ -432,7 +432,10 @@ public class Main {
                 int bonus = 0;
                 switch (numberOfActivities){
                     case 1:
-                        bonus = 1;
+                        if(check.get(0) || check.get(1) || check.get(2) || check.get(3) || check.get (4))
+                        {
+                            bonus = 1;
+                        }
                         break;
                     case 2:
                         if((check.get(0) && check.get(4)) || (check.get(0) && check.get(3)) || (check.get(1) && check.get(4))){
