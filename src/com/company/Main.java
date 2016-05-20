@@ -24,7 +24,8 @@ public class Main {
     public Random intGenerator = new Random();
 
     // Score keeper
-    public int scoreValue;
+    // public int scoreValue;
+    // public int currentScore;
 
     public int timeslots = 20;
     public int timeslotsNight = 25;
@@ -34,12 +35,6 @@ public class Main {
     public int iterationsLimit = 10000;
     public int fileNumber = 1;
     public List<Integer> scores = new ArrayList<>();
-
-    public int currentScore;
-    public int studentConflictCounter;
-    public int capacityConflictCounter;
-    public int nightSlotPenaltyCount;
-    public int distributionPoints;
 
     public static void main(String[] args) {
         new Main().go();
@@ -53,7 +48,7 @@ public class Main {
 
         makeActivities();
 
-        //Scorefunctietest
+        /*//Scorefunctietest
 
         Activity test1 = activities.get(0);
         Activity test2 = activities.get(1);
@@ -74,17 +69,20 @@ public class Main {
 
 
 
-        //Einde scorefunctietest
+        //Einde scorefunctietest*/
 
-        //makeRandomSchedule();
+        makeRandomSchedule();
 
-        computeScore();
+        int scoreValue = computeScore();
 
-        System.out.println("Nachtslot Maluspunten: " + nightSlotPenaltyCount);
-        System.out.println(studentConflictCounter + " studenten zijn dubbel geroosterd!");
-        System.out.println(capacityConflictCounter + " studenten passen niet in hun lokaal!");
+        //computeScore();
+
+        System.out.println("Nachtslot Maluspunten: " + computeNightslotPenalty());
+        System.out.println(computeStudentConflicts() + " studenten zijn dubbel geroosterd!");
+        System.out.println(computeCapacityConflicts() + " studenten passen niet in hun lokaal!");
         System.out.println("Totale score: " + scoreValue);
-        System.out.println("Aantal activities: "+activities.size());
+        System.out.println("Aantal activities: " + activities.size());
+
         hillClimber();
 
 
@@ -257,19 +255,20 @@ public class Main {
 
     }
 
-    public void computeScore(){
+    public int computeScore(){
+    //public void computeScore(){
 
-        computeActivityScore();
-        computeStudentConflicts();
-        computeCapacityConflicts();
-        computeNightslotPenalty();
-        computeDistribution();
+        int activityScore = computeActivityScore();
+        int studentConflictCounter = computeStudentConflicts();
+        int capacityConflictCounter = computeCapacityConflicts();
+        int nightSlotPenaltyCount = computeNightslotPenalty();
+        int distributionPoints = computeDistribution();
 
-        scoreValue = scoreValue - capacityConflictCounter - studentConflictCounter
+        return activityScore - studentConflictCounter - capacityConflictCounter
                 - nightSlotPenaltyCount + distributionPoints;
     }
 
-    public void computeActivityScore(){
+    public int computeActivityScore(){
         int activityCounter = 0;
         for (Activity activity : activities){
             for (Room room : rooms){
@@ -281,18 +280,18 @@ public class Main {
         }
         if (activityCounter == activities.size()){
             //System.out.println("1000 punten, alle activities ingeroosterd");
-            scoreValue = 1000;
+            return 1000;
         }
         else{
             //System.out.println("0 punten, niet alle activities zijn ingeroosterd");
-            scoreValue = 0;
+            return 0;
         }
     }
 
-    public void computeStudentConflicts(){
+    public int computeStudentConflicts(){
         //Functie die rooster conflicten checkt
         ArrayList<Student> checkedStudentsList = new ArrayList<Student>();
-        studentConflictCounter = 0;
+        int studentConflictCounter = 0;
         boolean conflictFound = false;
 
         for (int i = 0 ; i < timeslots ; i++){      // !! timeslots vs timeslotsNight?
@@ -321,11 +320,12 @@ public class Main {
             }
             checkedStudentsList.clear();
         }
+        return studentConflictCounter;
     }
 
-    public void computeCapacityConflicts(){
+    public int computeCapacityConflicts(){
         // Functie die capacatiteit conflicten checkt
-        capacityConflictCounter = 0;
+        int capacityConflictCounter = 0;
         for (Room room : rooms){
             for (Activity activity : room.timetable){
                 if(activity != null) {
@@ -336,10 +336,11 @@ public class Main {
                 }
             }
         }
+        return capacityConflictCounter;
     }
 
-    public void computeNightslotPenalty(){
-        nightSlotPenaltyCount = 0;
+    public int computeNightslotPenalty(){
+        int nightSlotPenaltyCount = 0;
         // Checkt gebruik van avondslot
         for (Room room: rooms){
             if (room.nightSlot){
@@ -350,114 +351,25 @@ public class Main {
                 }
             }
         }
+        return nightSlotPenaltyCount;
     }
 
-    public void computeDistribution(){
-        distributionPoints = 0;
-        for (Course course: courses){
+    public int computeDistribution() {
+        int distributionPoints = 0;
+
+        for (Course course : courses) {
             List<List<Boolean>> workgroupWeeks = new ArrayList<>();
-            for (int r = 0; r < course.numberOfGroups; r++) {
+            for (int i = 0; i < course.numberOfGroups; i++) {
                 List<Boolean> weekDistribution = new ArrayList<>();
                 for (int s = 0; s < 5; s++) {
                     weekDistribution.add(false);
                 }
                 workgroupWeeks.add(weekDistribution);
             }
-            int distributionMalus = 0;
-            int distributionBonus = 0;
-
-            // Weekverdeling malus
-            for(int j = 0; j < timeslotsNight; j++){     //Timeslots vs timeslotsNight
-                for(int k = 0; k < rooms.size(); k++) {
-                    if (!rooms.get(k).nightSlot && j >= timeslots){
-                        break;
-                    }
-                    Activity activity = rooms.get(k).timetable.get(j);
-                    if(activity != null){
-                        if(activity.course == course) {
-                            int day;
-                            switch (j){
-                                case 0:case 1:case 2:case 3:case 20:
-                                    day = 0;
-                                    break;
-                                case 4:case 5:case 6:case 7:case 21:
-                                    day = 1;
-                                    break;
-                                case 8:case 9:case 10:case 11:case 22:
-                                    day = 2;
-                                    break;
-                                case 12:case 13:case 14:case 15:case 23:
-                                    day = 3;
-                                    break;
-                                case 16:case 17:case 18:case 19:case 24:
-                                    day = 4;
-                                    break;
-                                default:
-                                    day = 0;
-                                    break;
-                            }
-
-                            if (activity.activity == "Hoorcollege"){
-                                for(int l = 0; l < course.numberOfGroups; l++){
-                                    if (!workgroupWeeks.get(l).get(day)){
-                                        workgroupWeeks.get(l).set(day, true);
-                                    }
-                                    else{
-                                        distributionMalus++;
-                                    }
-                                }
-                            }
-                            else{
-                                int workgroup = activity.groupNumber - 1;
-                                if (!workgroupWeeks.get(workgroup).get(day)) {
-                                    workgroupWeeks.get(workgroup).set(day, true);
-                                }
-                                else{
-                                    distributionMalus++;
-                                }
-                            }
-                        }
-                    }
-                    /*if(timeslotsPerWeek == timeslotsNight){
-                        timeslotsPerWeek = timeslots;
-                    }*/
-                }
-            }
-            //System.out.println(workgroupWeeks);
-
-            // Weekverdeling bonus
-            for (int j = 0; j < course.numberOfGroups; j++) {
-                int numberOfActivities = course.numberLectures + course.numberWorkGroups + course.numberPracticum;
-                List<Boolean> check = workgroupWeeks.get(j);
-                int bonus = 0;
-                switch (numberOfActivities){
-                    case 1:
-                        if(check.get(0) || check.get(1) || check.get(2) || check.get(3) || check.get (4))
-                        {
-                            bonus = 1;
-                        }
-                        break;
-                    case 2:
-                        if((check.get(0) && check.get(4)) || (check.get(0) && check.get(3)) || (check.get(1) && check.get(4))){
-                            bonus = 1;
-                        }
-                        break;
-                    case 3:
-                        if(check.get(0) && check.get(2) && check.get(4)){
-                            bonus = 1;
-                        }
-                        break;
-                    case 4:
-                        if(check.get(0) && check.get(1) && check.get(3) && check.get(4)){
-                            bonus = 1;
-                        }
-                        break;
-                    default:
-                        bonus = 0;
-                        break;
-                }
-                distributionBonus += bonus;
-            }
+            int distributionMalus = computeDistributionMalus(course, workgroupWeeks);
+            int distributionBonus = computeDistributionBonus(course, workgroupWeeks);
+            //int BonusMalus = computeBonusMalus(course, distributionBonus, distributionMalus);
+            //distributionPoints =+ BonusMalus;
             int factorMalus;
             int factorBonus;
             switch (course.numberOfGroups){     //hardcoded
@@ -493,14 +405,146 @@ public class Main {
 
             distributionPoints = distributionPoints + (distributionBonus * factorBonus) - (distributionMalus * factorMalus);
         }
+        return distributionPoints;
+    }
 
-        //System.out.println(distributionPoints);
+    public int computeDistributionMalus(Course course, List<List<Boolean>> workgroupWeeks){
+        int distributionMalus = 0;
+        for(int i = 0; i < timeslotsNight; i++){
+            for(int j = 0; j < rooms.size(); j++) {
+                if (!rooms.get(j).nightSlot && i >= timeslots){
+                    break;
+                }
+                Activity activity = rooms.get(j).timetable.get(i);
+                if(activity != null){
+                    if(activity.course == course) {
+                        int day;
+                        switch (i){
+                            case 0:case 1:case 2:case 3:case 20:
+                                day = 0;
+                                break;
+                            case 4:case 5:case 6:case 7:case 21:
+                                day = 1;
+                                break;
+                            case 8:case 9:case 10:case 11:case 22:
+                                day = 2;
+                                break;
+                            case 12:case 13:case 14:case 15:case 23:
+                                day = 3;
+                                break;
+                            case 16:case 17:case 18:case 19:case 24:
+                                day = 4;
+                                break;
+                            default:
+                                day = 0;
+                                break;
+                        }
+
+                        if (activity.activity == "Hoorcollege"){
+                            for(int l = 0; l < course.numberOfGroups; l++){
+                                if (!workgroupWeeks.get(l).get(day)){
+                                    workgroupWeeks.get(l).set(day, true);
+                                }
+                                else{
+                                    distributionMalus++;
+                                }
+                            }
+                        }
+                        else{
+                            int workgroup = activity.groupNumber - 1;
+                            if (!workgroupWeeks.get(workgroup).get(day)) {
+                                workgroupWeeks.get(workgroup).set(day, true);
+                            }
+                            else{
+                                distributionMalus++;
+                            }
+                        }
+                    }
+                }
+            }
+        }
+        return distributionMalus;
+    }
+
+    public int computeDistributionBonus(Course course, List<List<Boolean>> workgroupWeeks){
+        int distributionBonus = 0;
+        for (int i = 0; i < course.numberOfGroups; i++) {
+            int numberOfActivities = course.numberLectures + course.numberWorkGroups + course.numberPracticum;
+            List<Boolean> check = workgroupWeeks.get(i);
+            int bonus = 0;
+            switch (numberOfActivities){
+                case 1:
+                    if(check.get(0) || check.get(1) || check.get(2) || check.get(3) || check.get (4))
+                    {
+                        bonus = 1;
+                    }
+                    break;
+                case 2:
+                    if((check.get(0) && check.get(4)) || (check.get(0) && check.get(3)) || (check.get(1) && check.get(4))){
+                        bonus = 1;
+                    }
+                    break;
+                case 3:
+                    if(check.get(0) && check.get(2) && check.get(4)){
+                        bonus = 1;
+                    }
+                    break;
+                case 4:
+                    if(check.get(0) && check.get(1) && check.get(3) && check.get(4)){
+                        bonus = 1;
+                    }
+                    break;
+                default:
+                    bonus = 0;
+                    break;
+            }
+            distributionBonus += bonus;
+        }
+        return distributionBonus;
+    }
+
+    public int computeBonusMalus(Course course, int distributionBonus, int distributionMalus){
+        int factorMalus;
+        int factorBonus;
+        switch (course.numberOfGroups){     //hardcoded
+            case 1:
+                factorMalus = 10;
+                factorBonus = 20;
+                break;
+            case 2:
+                factorMalus = 5;
+                factorBonus = 10;
+                break;
+            case 3:
+                factorMalus = 3;
+                factorBonus = 7;
+                break;
+            case 4:
+                factorMalus = 3;
+                factorBonus = 5;
+                break;
+            case 5:
+                factorMalus = 2;
+                factorBonus = 4;
+                break;
+            case 6:
+                factorMalus = 1;
+                factorBonus = 3;
+                break;
+            default:
+                factorMalus = 1;
+                factorBonus = 1;
+                break;
+        }
+
+        int BonusMalus = (distributionBonus * factorBonus) - (distributionMalus * factorMalus);
+        return BonusMalus;
     }
 
     public void hillClimber(){
         while(iterationsCounter < iterationsLimit) {
             swapRandomActivities();
-            scores.add(currentScore);
+            scores.add(computeScore());
             iterationsCounter++;
             if (iterationsCounter % 10000 == 0){
                 //System.out.println(scores);
@@ -522,10 +566,10 @@ public class Main {
             }
         }
 
-        System.out.println("Score na " + iterationsLimit + " iteraties: " + scoreValue);
-        System.out.println("Nachtslot Maluspunten: " + nightSlotPenaltyCount);
-        System.out.println(studentConflictCounter + " studenten zijn dubbel geroosterd!");
-        System.out.println(capacityConflictCounter + " studenten passen niet in hun lokaal!");
+        System.out.println("Score na " + iterationsLimit + " iteraties: " + computeScore());
+        System.out.println("Nachtslot Maluspunten: " + computeNightslotPenalty());
+        System.out.println(computeStudentConflicts() + " studenten zijn dubbel geroosterd!");
+        System.out.println(computeCapacityConflicts() + " studenten passen niet in hun lokaal!");
     }
 
     // Hill climbing swapactivities
@@ -540,22 +584,28 @@ public class Main {
         int timeslot2 = intGenerator.nextInt(amountOfTimeslots2);
         Activity activity2 = rooms.get(room2).timetable.get(timeslot2);
 
-        int currentStudentConflict = studentConflictCounter;
-        int currentCapacityConflict = capacityConflictCounter;
-        int currentNightslotPenalty = nightSlotPenaltyCount;
+        //int currentStudentConflict = studentConflictCounter;
+        int currentCapacityConflict = computeCapacityConflicts();
+        int currentNightslotPenalty = computeNightslotPenalty();
 
-        currentScore = scoreValue;
+        //currentScore = scoreValue;
+        int currentScore = computeScore();
 
         rooms.get(room1).timetable.set(timeslot1, activity2);
         rooms.get(room2).timetable.set(timeslot2, activity1);
-        computeScore();
-        if (scoreValue <= currentScore){
+
+        // overbodig
+        //computeScore();
+
+        if (/*scoreValue*/ computeScore() <= currentScore){
             rooms.get(room1).timetable.set(timeslot1, activity1);
             rooms.get(room2).timetable.set(timeslot2, activity2);
-            scoreValue = currentScore;
-            studentConflictCounter = currentStudentConflict;
-            capacityConflictCounter = currentCapacityConflict;
-            nightSlotPenaltyCount = currentNightslotPenalty;
+            //scoreValue = currentScore;
+
+            // overbodig
+            //studentConflictCounter = currentStudentConflict;
+            //computeCapacityConflicts() = currentCapacityConflict;
+            //computeNightslotPenalty() = currentNightslotPenalty;
         }
 
     }
