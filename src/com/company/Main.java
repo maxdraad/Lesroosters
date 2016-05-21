@@ -2,6 +2,7 @@ package com.company;
 
 import java.io.*;
 import java.util.*;
+import java.lang.Math;
 
 
 public class Main {
@@ -594,18 +595,21 @@ public class Main {
         rooms.get(room1).timetable.set(timeslot1, activity2);
         rooms.get(room2).timetable.set(timeslot2, activity1);
 
-        // overbodig
-        //computeScore();
+        int newScore = computeScore();
 
-        if (/*scoreValue*/ computeScore() <= currentScore){
-            rooms.get(room1).timetable.set(timeslot1, activity1);
-            rooms.get(room2).timetable.set(timeslot2, activity2);
+        if (/*scoreValue*/ newScore < currentScore && iterationsCounter > 0){
+
+            //Hier is simulated annealing met functie f(x) = -e^((VARIABELE/(newScore - currentScore))/x) +1
+            //VARIABELE kan aangepast worden, plot de grafiek om de kansverdeling te zien
+
+            double chance = - Math.exp( ( 10000 / ( newScore - currentScore) ) / iterationsCounter  ) + 1 ;
+
+            if (chance < intGenerator.nextDouble()){
+                rooms.get(room1).timetable.set(timeslot1, activity1);
+                rooms.get(room2).timetable.set(timeslot2, activity2);
+            }
+
             //scoreValue = currentScore;
-
-            // overbodig
-            //studentConflictCounter = currentStudentConflict;
-            //computeCapacityConflicts() = currentCapacityConflict;
-            //computeNightslotPenalty() = currentNightslotPenalty;
         }
 
     }
