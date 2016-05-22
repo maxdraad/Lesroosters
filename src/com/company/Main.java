@@ -30,8 +30,7 @@ public class Main {
     // Limiet van het aantal iteraties van de Hill Climber
     public static int iterationsLimit = 10000;
 
-
-    public int fileNumber = 1;
+    public int fileNumber = 4;
     public List<Integer> scores = new ArrayList<>();
 
     public static void main(String[] args) {
@@ -573,26 +572,27 @@ public class Main {
 
     // Hill climbing swapactivities
     public void swapRandomActivities(){
+
+        //Kies een random activiteit #1
         int room1 = numberGenerator.nextInt(amountOfRooms);
         int amountOfTimeslots1 = rooms.get(room1).timetable.size();
         int timeslot1 = numberGenerator.nextInt(amountOfTimeslots1);
         Activity activity1 = rooms.get(room1).timetable.get(timeslot1);
 
+        //Kies een random activiteit #2
         int room2 = numberGenerator.nextInt(amountOfRooms);
         int amountOfTimeslots2 = rooms.get(room2).timetable.size();
         int timeslot2 = numberGenerator.nextInt(amountOfTimeslots2);
         Activity activity2 = rooms.get(room2).timetable.get(timeslot2);
 
-        //int currentStudentConflict = studentConflictCounter;
-        int currentCapacityConflict = computeCapacityConflicts();
-        int currentNightslotPenalty = computeNightslotPenalty();
-
-        //currentScore = scoreValue;
+        //Bereken de huidige score
         int currentScore = computeScore();
 
+        //Verwissel de activiteiten
         rooms.get(room1).timetable.set(timeslot1, activity2);
         rooms.get(room2).timetable.set(timeslot2, activity1);
 
+        //Bereken de score opnieuw
         int newScore = computeScore();
 
         if (/*scoreValue*/ newScore < currentScore && iterationsCounter > 0){
@@ -600,14 +600,12 @@ public class Main {
             //Hier is simulated annealing met functie f(n-iteraties) = -e^((VARIABELE/(newScore - currentScore))/n-iteraties) +1
             //VARIABELE kan aangepast worden, plot de grafiek om de kansverdeling te zien, hoger is vrijer
 
-            double chance = - Math.exp( ( 10000 / ( newScore - currentScore) ) / iterationsCounter  ) + 1 ;
+            double chance = - Math.exp( ( 5000 / ( newScore - currentScore) ) / iterationsCounter  ) + 1 ;
 
             if (chance < numberGenerator.nextDouble()){
                 rooms.get(room1).timetable.set(timeslot1, activity1);
                 rooms.get(room2).timetable.set(timeslot2, activity2);
             }
-
-            //scoreValue = currentScore;
         }
 
     }
