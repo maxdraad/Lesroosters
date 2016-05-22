@@ -7,33 +7,30 @@ import java.lang.Math;
 
 public class Main {
 
-    /*
-    Om printout tekst in kleur te krijgen
-    public static final String ANSI_RED = "\u001B[31m";
-    En weer zwart te maken
-    public static final String ANSI_RESET = "\u001B[0m";
-    */
-
-    // ArrayList to keep al courses, rooms and students and their information
+    // Lijsten om vakken, lokalen, studenten en activiteiten in op te slaan
     public List<Course> courses = new ArrayList<>();
     public List<Room> rooms = new ArrayList<>();
     public List<Student> students = new ArrayList<>();
     public List<Activity> activities = new ArrayList<>();
     // public List<Timeslot> timeslots = new ArrayList<>();
 
-    // Random number generator
-    public Random intGenerator = new Random();
+    // Random getal generator
+    public Random numberGenerator = new Random();
 
-    // Score keeper
-    // public int scoreValue;
-    // public int currentScore;
+    // Het aantal normale tijdslots
+    public static int timeslots = 20;
+    // Het aantal normale tijdslots + nachtslots (met maluspunten)
+    public static int timeslotsNight = 25;
 
-    public int timeslots = 20;
-    public int timeslotsNight = 25;
     public int amountOfRooms;
 
+    // Telt iteraties van de Hill Climber
     public int iterationsCounter = 0;
-    public int iterationsLimit = 10000;
+
+    // Limiet van het aantal iteraties van de Hill Climber
+    public static int iterationsLimit = 10000;
+
+
     public int fileNumber = 1;
     public List<Integer> scores = new ArrayList<>();
 
@@ -46,14 +43,15 @@ public class Main {
         getCourses();
         getRooms();
         getStudents();
-
         makeActivities();
 
-        /*//Scorefunctietest
-
-        Activity test1 = activities.get(0);
-        Activity test2 = activities.get(1);
-        Activity test3 = activities.get(2);
+        /*
+        //Scorefunctietest
+        Activity test1 = activities.get(3);
+        Activity test2 = activities.get(4);
+        Activity test3 = activities.get(5);
+        Activity test4 = activities.get(6);
+        Activity test5 = activities.get(7);
 
         for (int i = 0; i < activities.size(); i++) {
             System.out.println(i + ": " + activities.get(i).course.name + " | Aantal " + activities.get(i).activity + ": " +
@@ -61,22 +59,18 @@ public class Main {
                     activities.get(i).studentGroup.size());
         }
 
-        /*
-        rooms.get(1).timetable.set(1, test1);
-        rooms.get(3).timetable.set(1, test2);
-        rooms.get(2).timetable.set(1, test3);
-        */
 
-
-
-
+        rooms.get(6).timetable.set(0, test1);
+        rooms.get(4).timetable.set(4, test2);
+        rooms.get(5).timetable.set(9, test4);
+        rooms.get(4).timetable.set(15, test3);
+        rooms.get(5).timetable.set(19, test5);
         //Einde scorefunctietest*/
 
         makeRandomSchedule();
-
         int scoreValue = computeScore();
 
-        //computeScore();
+        computeScore();
 
         System.out.println("Nachtslot Maluspunten: " + computeNightslotPenalty());
         System.out.println(computeStudentConflicts() + " studenten zijn dubbel geroosterd!");
@@ -236,13 +230,13 @@ public class Main {
     public void makeRandomSchedule(){
         amountOfRooms = rooms.size();
         for (Activity activity : activities) {
-            int i = intGenerator.nextInt(amountOfRooms);
+            int i = numberGenerator.nextInt(amountOfRooms);
             int amountOfTimeslots = rooms.get(i).timetable.size();
-            int j = intGenerator.nextInt(amountOfTimeslots);
+            int j = numberGenerator.nextInt(amountOfTimeslots);
             while (rooms.get(i).timetable.get(j) != null) {
-                i = intGenerator.nextInt(amountOfRooms);
+                i = numberGenerator.nextInt(amountOfRooms);
                 amountOfTimeslots = rooms.get(i).timetable.size();
-                j = intGenerator.nextInt(amountOfTimeslots);
+                j = numberGenerator.nextInt(amountOfTimeslots);
             }
             rooms.get(i).timetable.set(j, activity);
             /*System.out.println(activities.get(i).course.name+ " " + activities.get(i).activity + " ingedeeld in lokaal " + rooms.get(i).name + ", timeslot " + j );
@@ -269,6 +263,7 @@ public class Main {
                 - nightSlotPenaltyCount + distributionPoints;
     }
 
+    //Deze method checkt of alle activiteiten daadwerkelijk ingeroosterd zijn
     public int computeActivityScore(){
         int activityCounter = 0;
         for (Activity activity : activities){
@@ -289,19 +284,19 @@ public class Main {
         }
     }
 
+    //Deze method checkt rooster conflicten (Dubbele roosteringen van studenten)
     public int computeStudentConflicts(){
-        //Functie die rooster conflicten checkt
         ArrayList<Student> checkedStudentsList = new ArrayList<Student>();
         int studentConflictCounter = 0;
         boolean conflictFound = false;
 
-        for (int i = 0 ; i < timeslots ; i++){      // !! timeslots vs timeslotsNight?
-            for (int j = 0; j < rooms.size() - 1; j++){ //Want studenten uit het laatste lokaal hoeven nooit gecheckt te worden
+        for (int i = 0 ; i < timeslots ; i++){
+            for (int j = 0; j < rooms.size() - 1; j++){
                 Activity activity = rooms.get(j).timetable.get(i);
                 if (activity != null) {
                     for (Student student : activity.studentGroup) {
                         if (!checkedStudentsList.contains(student)) {
-                            for (int k = j + 1; k < rooms.size(); k++) { // Want alleen lokalen onder de huidige hoeven gecheckt en het lokaal zelf ook niet
+                            for (int k = j + 1; k < rooms.size(); k++) {
                                 Room otherRoom = rooms.get(k);
                                 Activity otherActivity = otherRoom.timetable.get(i);
                                 if (otherActivity != null) {
@@ -324,8 +319,8 @@ public class Main {
         return studentConflictCounter;
     }
 
+    // Deze method checkt capacatiteit conflicten (te veel studenten in een zaal)
     public int computeCapacityConflicts(){
-        // Functie die capacatiteit conflicten checkt
         int capacityConflictCounter = 0;
         for (Room room : rooms){
             for (Activity activity : room.timetable){
@@ -340,6 +335,7 @@ public class Main {
         return capacityConflictCounter;
     }
 
+    // Deze method checkt het gebruik van het nachtslot
     public int computeNightslotPenalty(){
         int nightSlotPenaltyCount = 0;
         // Checkt gebruik van avondslot
@@ -355,6 +351,7 @@ public class Main {
         return nightSlotPenaltyCount;
     }
 
+    // Deze method checkt de weekverdeling van activiteiten
     public int computeDistribution() {
         int distributionPoints = 0;
 
@@ -369,8 +366,6 @@ public class Main {
             }
             int distributionMalus = computeDistributionMalus(course, workgroupWeeks);
             int distributionBonus = computeDistributionBonus(course, workgroupWeeks);
-            //int BonusMalus = computeBonusMalus(course, distributionBonus, distributionMalus);
-            //distributionPoints =+ BonusMalus;
             int factorMalus;
             int factorBonus;
             switch (course.numberOfGroups){     //hardcoded
@@ -409,6 +404,7 @@ public class Main {
         return distributionPoints;
     }
 
+    // Deze method checkt de maluspunten voor de weekverdeling van activiteiten
     public int computeDistributionMalus(Course course, List<List<Boolean>> workgroupWeeks){
         int distributionMalus = 0;
         for(int i = 0; i < timeslotsNight; i++){
@@ -467,6 +463,7 @@ public class Main {
         return distributionMalus;
     }
 
+    // Deze method checkt de bonuspunten voor de weekverdeling van activiteiten
     public int computeDistributionBonus(Course course, List<List<Boolean>> workgroupWeeks){
         int distributionBonus = 0;
         for (int i = 0; i < course.numberOfGroups; i++) {
@@ -542,6 +539,7 @@ public class Main {
         return BonusMalus;
     }
 
+
     public void hillClimber(){
         while(iterationsCounter < iterationsLimit) {
             swapRandomActivities();
@@ -575,14 +573,14 @@ public class Main {
 
     // Hill climbing swapactivities
     public void swapRandomActivities(){
-        int room1 = intGenerator.nextInt(amountOfRooms);
+        int room1 = numberGenerator.nextInt(amountOfRooms);
         int amountOfTimeslots1 = rooms.get(room1).timetable.size();
-        int timeslot1 = intGenerator.nextInt(amountOfTimeslots1);
+        int timeslot1 = numberGenerator.nextInt(amountOfTimeslots1);
         Activity activity1 = rooms.get(room1).timetable.get(timeslot1);
 
-        int room2 = intGenerator.nextInt(amountOfRooms);
+        int room2 = numberGenerator.nextInt(amountOfRooms);
         int amountOfTimeslots2 = rooms.get(room2).timetable.size();
-        int timeslot2 = intGenerator.nextInt(amountOfTimeslots2);
+        int timeslot2 = numberGenerator.nextInt(amountOfTimeslots2);
         Activity activity2 = rooms.get(room2).timetable.get(timeslot2);
 
         //int currentStudentConflict = studentConflictCounter;
@@ -599,12 +597,12 @@ public class Main {
 
         if (/*scoreValue*/ newScore < currentScore && iterationsCounter > 0){
 
-            //Hier is simulated annealing met functie f(x) = -e^((VARIABELE/(newScore - currentScore))/x) +1
-            //VARIABELE kan aangepast worden, plot de grafiek om de kansverdeling te zien
+            //Hier is simulated annealing met functie f(n-iteraties) = -e^((VARIABELE/(newScore - currentScore))/n-iteraties) +1
+            //VARIABELE kan aangepast worden, plot de grafiek om de kansverdeling te zien, hoger is vrijer
 
             double chance = - Math.exp( ( 10000 / ( newScore - currentScore) ) / iterationsCounter  ) + 1 ;
 
-            if (chance < intGenerator.nextDouble()){
+            if (chance < numberGenerator.nextDouble()){
                 rooms.get(room1).timetable.set(timeslot1, activity1);
                 rooms.get(room2).timetable.set(timeslot2, activity2);
             }
