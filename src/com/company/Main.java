@@ -66,10 +66,13 @@ public class Main {
         rooms.get(5).timetable.set(19, test5);
         //Einde scorefunctietest*/
 
+
         makeRandomSchedule();
         int scoreValue = computeScore();
 
-        computeScore();
+
+        //sampleRandomSchedule();
+        //scoreValue = computeScore();
 
         System.out.println("Nachtslot Maluspunten: " + computeNightslotPenalty());
         System.out.println(computeStudentConflicts() + " studenten zijn dubbel geroosterd!");
@@ -597,10 +600,10 @@ public class Main {
 
         if (/*scoreValue*/ newScore < currentScore && iterationsCounter > 0){
 
-            //Hier is simulated annealing met functie f(n-iteraties) = -e^((VARIABELE/(newScore - currentScore))/n-iteraties) +1
+            //Hier is simulated annealing met functie f(n-iteraties) = 1-e^((VARIABELE/(newScore - currentScore))/n-iteraties)
             //VARIABELE kan aangepast worden, plot de grafiek om de kansverdeling te zien, hoger is vrijer
 
-            double chance = - Math.exp( ( 5000 / ( newScore - currentScore) ) / iterationsCounter  ) + 1 ;
+            double chance = 1 - Math.exp( ( 10000 / ( newScore - currentScore) ) / iterationsCounter  ) ;
 
             if (chance < numberGenerator.nextDouble()){
                 rooms.get(room1).timetable.set(timeslot1, activity1);
@@ -646,6 +649,24 @@ public class Main {
             }
         }
         return activities;
+    }
+
+    public void sampleRandomSchedule(){
+        List<Room> bestRandom = rooms;
+        int scoreValue = computeScore();
+        for(int i = 0; i < 1000; i++){
+            for(Room room: rooms){
+                room.timetable.clear();
+            }
+            makeRandomSchedule();
+            int newScoreValue = computeScore();
+            if (newScoreValue > scoreValue){
+                scoreValue = newScoreValue;
+                bestRandom = rooms;
+            }
+
+        }
+        rooms = bestRandom;
     }
 }
 
