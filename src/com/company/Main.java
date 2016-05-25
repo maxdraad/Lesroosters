@@ -28,7 +28,7 @@ public class Main {
     public int iterationsCounter = 0;
 
     // Limiet van het aantal iteraties van de Hill Climber
-    public static int iterationsLimit = 10000;
+    public static int iterationsLimit = 100000;
 
     public int fileNumber = 4;
     public List<Integer> scores = new ArrayList<>();
@@ -503,6 +503,8 @@ public class Main {
         return distributionBonus;
     }
 
+    // Deze method berekend de totale malus/bonus met een factor afhankelijk van het aantal werkgroepen
+    // Voorlopig nog niet het juiste resultaat. Code staat in computeDistribution() kloppend
     public int computeBonusMalus(Course course, int distributionBonus, int distributionMalus){
         int factorMalus;
         int factorBonus;
@@ -550,7 +552,7 @@ public class Main {
             if (iterationsCounter % 10000 == 0){
                 //System.out.println(scores);
                 try {
-                    FileWriter fw = new FileWriter("File" + fileNumber + ".txt", true);
+                    FileWriter fw = new FileWriter("HillclimberFile" + fileNumber + ".txt", true);
                     BufferedWriter bw = new BufferedWriter(fw);
                     PrintWriter out = new PrintWriter(bw);
                     for(int i = 0; i < 10000; i++){
@@ -561,9 +563,6 @@ public class Main {
                     System.out.println("Something went wrong");
                 }
                 scores.clear();
-            }
-            if (iterationsCounter % 10000 == 0){
-                fileNumber++;
             }
         }
 
