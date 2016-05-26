@@ -12,7 +12,6 @@ public class Main {
     public List<Room> rooms = new ArrayList<>();
     public List<Student> students = new ArrayList<>();
     public List<Activity> activities = new ArrayList<>();
-    // public List<Timeslot> timeslots = new ArrayList<>();
 
     // Random getal generator
     public Random numberGenerator = new Random();
@@ -39,41 +38,17 @@ public class Main {
 
     public void go() {
 
+        // Alle data inlezen
         getCourses();
         getRooms();
         getStudents();
         makeActivities();
 
-        /*
-        //Scorefunctietest
-        Activity test1 = activities.get(3);
-        Activity test2 = activities.get(4);
-        Activity test3 = activities.get(5);
-        Activity test4 = activities.get(6);
-        Activity test5 = activities.get(7);
-
-        for (int i = 0; i < activities.size(); i++) {
-            System.out.println(i + ": " + activities.get(i).course.name + " | Aantal " + activities.get(i).activity + ": " +
-                    activities.get(i).occurrence + " | Groep: " + activities.get(i).groupNumber + " | Aantal studenten: " +
-                    activities.get(i).studentGroup.size());
-        }
-
-
-        rooms.get(6).timetable.set(0, test1);
-        rooms.get(4).timetable.set(4, test2);
-        rooms.get(5).timetable.set(9, test4);
-        rooms.get(4).timetable.set(15, test3);
-        rooms.get(5).timetable.set(19, test5);
-        //Einde scorefunctietest*/
-
-
+        // Eerste (random) rooster
         makeRandomSchedule();
         int scoreValue = computeScore();
 
-
-        //sampleRandomSchedule();
-        //scoreValue = computeScore();
-
+        // Gegevens van het eerste rooster.
         System.out.println("Nachtslot Maluspunten: " + computeNightslotPenalty());
         System.out.println(computeStudentConflicts() + " studenten zijn dubbel geroosterd!");
         System.out.println(computeCapacityConflicts() + " studenten passen niet in hun lokaal!");
@@ -82,9 +57,11 @@ public class Main {
 
         hillClimber();
 
-
-
-
+        // Gegevens van het best gevonden rooster
+        System.out.println("Score na " + iterationsLimit + " iteraties: " + computeScore());
+        System.out.println("Nachtslot Maluspunten: " + computeNightslotPenalty());
+        System.out.println(computeStudentConflicts() + " studenten zijn dubbel geroosterd!");
+        System.out.println(computeCapacityConflicts() + " studenten passen niet in hun lokaal!");
     }
 
     // Read all courses from file and define their features
@@ -184,17 +161,6 @@ public class Main {
             System.out.println("File Read Error Students");
         }
     }
-
-    {/* public void makeTimeslots(){
-        //Maakt 5 timeslots aan//
-        for(int i = 1; i<= 5; i++){
-            for (int j = 1; j <= 5; j++) {
-                Timeslot newTimeslot = new Timeslot(7 + (2 * j) + " tot " + 9 + (2 * j), i);
-                timeslots.add(newTimeslot);
-            }
-        }
-    }
-    */}
 
     public void makeActivities(){
         //For loop die activities aanmaakt
@@ -503,47 +469,6 @@ public class Main {
         return distributionBonus;
     }
 
-    // Deze method berekend de totale malus/bonus met een factor afhankelijk van het aantal werkgroepen
-    // Voorlopig nog niet het juiste resultaat. Code staat in computeDistribution() kloppend
-    public int computeBonusMalus(Course course, int distributionBonus, int distributionMalus){
-        int factorMalus;
-        int factorBonus;
-        switch (course.numberOfGroups){     //hardcoded
-            case 1:
-                factorMalus = 10;
-                factorBonus = 20;
-                break;
-            case 2:
-                factorMalus = 5;
-                factorBonus = 10;
-                break;
-            case 3:
-                factorMalus = 3;
-                factorBonus = 7;
-                break;
-            case 4:
-                factorMalus = 3;
-                factorBonus = 5;
-                break;
-            case 5:
-                factorMalus = 2;
-                factorBonus = 4;
-                break;
-            case 6:
-                factorMalus = 1;
-                factorBonus = 3;
-                break;
-            default:
-                factorMalus = 1;
-                factorBonus = 1;
-                break;
-        }
-
-        int BonusMalus = (distributionBonus * factorBonus) - (distributionMalus * factorMalus);
-        return BonusMalus;
-    }
-
-
     public void hillClimber(){
         while(iterationsCounter < iterationsLimit) {
             swapRandomActivities();
@@ -565,11 +490,6 @@ public class Main {
                 scores.clear();
             }
         }
-
-        System.out.println("Score na " + iterationsLimit + " iteraties: " + computeScore());
-        System.out.println("Nachtslot Maluspunten: " + computeNightslotPenalty());
-        System.out.println(computeStudentConflicts() + " studenten zijn dubbel geroosterd!");
-        System.out.println(computeCapacityConflicts() + " studenten passen niet in hun lokaal!");
     }
 
     // Hill climbing swapactivities
@@ -649,6 +569,7 @@ public class Main {
         }
         return activities;
     }
+
 
     public void sampleRandomSchedule(){
         List<Room> bestRandom = rooms;
