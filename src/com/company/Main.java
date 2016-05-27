@@ -27,7 +27,7 @@ public class Main {
     public int iterationsCounter = 0;
 
     // Limiet van het aantal iteraties van de Hill Climber
-    public static int iterationsLimit = 100000;
+    public static int iterationsLimit = 100;
 
     public int fileNumber = 4;
     public List<Integer> scores = new ArrayList<>();
@@ -62,6 +62,8 @@ public class Main {
         System.out.println("Nachtslot Maluspunten: " + computeNightslotPenalty());
         System.out.println(computeStudentConflicts() + " studenten zijn dubbel geroosterd!");
         System.out.println(computeCapacityConflicts() + " studenten passen niet in hun lokaal!");
+
+        for (Room room : rooms) System.out.println(room.name + "  " + room.nightSlot + " " + room.timetable);
     }
 
     // Read all courses from file and define their features
@@ -207,15 +209,7 @@ public class Main {
                 j = numberGenerator.nextInt(amountOfTimeslots);
             }
             rooms.get(i).timetable.set(j, activity);
-            /*System.out.println(activities.get(i).course.name+ " " + activities.get(i).activity + " ingedeeld in lokaal " + rooms.get(i).name + ", timeslot " + j );
-              try {
-                Thread.sleep(100);                 //1000 milliseconds is one second.
-            } catch(InterruptedException ex) {
-                Thread.currentThread().interrupt();
-            }*/
         }
-        //for (Room room : rooms) System.out.println(room.name + "  " + room.nightSlot + " " + room.timetable);
-
     }
 
     public int computeScore(){
