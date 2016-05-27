@@ -463,6 +463,7 @@ public class Main {
         return distributionBonus;
     }
 
+    // Deze method is een hill climber waar iteraties en scores bijgehouden worden
     public void hillClimber(){
         while(iterationsCounter < iterationsLimit) {
             swapRandomActivities();
@@ -486,7 +487,7 @@ public class Main {
         }
     }
 
-    // Hill climbing swapactivities
+    // Deze method is de hill climber
     public void swapRandomActivities(){
 
         //Kies een random activiteit #1
@@ -526,7 +527,7 @@ public class Main {
 
     }
 
-    //Method om activities mee te maken
+    // Deze method maakt activities aan
     public List<Activity> createActivity(Course course, Integer activitiesPerWeek, Integer maxNumberStudents, String nameLectureType, boolean hoorcollege){
         List<Activity> activities = new ArrayList<>();
         // Algoritme om (werk)groepen aan te maken
@@ -541,7 +542,6 @@ public class Main {
                     course.numberOfGroups = numberGroups;
                     int j;
                     for (j = 1; j < numberGroups; j++) {
-                        //List<Student> studentsWorkGroup = course.courseStudents.subList((j - 1) * maxNumberStudents, j * maxNumberStudents);
                         List<Student> studentsWorkGroup = course.courseStudents.subList((j - 1) * numberStudentsGroup, j * numberStudentsGroup);
                         Activity workGroup = new Activity(course, nameLectureType, i, j, studentsWorkGroup);
                         activities.add(workGroup);
@@ -556,6 +556,7 @@ public class Main {
                     Activity subGroup = new Activity(course, nameLectureType, i, 1, course.courseStudents);
                     activities.add(subGroup);
                 }
+                //Maakt 1 hoorcollege
             } else if (hoorcollege && activitiesPerWeek >= 1) {
                 Activity hoorCollege = new Activity(course, nameLectureType, i, 1, course.courseStudents);
                 activities.add(hoorCollege);
@@ -565,23 +566,6 @@ public class Main {
     }
 
 
-    public void sampleRandomSchedule(){
-        List<Room> bestRandom = rooms;
-        int scoreValue = computeScore();
-        for(int i = 0; i < 1000; i++){
-            for(Room room: rooms){
-                room.timetable.clear();
-            }
-            makeRandomSchedule();
-            int newScoreValue = computeScore();
-            if (newScoreValue > scoreValue){
-                scoreValue = newScoreValue;
-                bestRandom = rooms;
-            }
-
-        }
-        rooms = bestRandom;
-    }
 }
 
 
