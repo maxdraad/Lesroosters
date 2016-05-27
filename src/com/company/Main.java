@@ -27,9 +27,9 @@ public class Main {
     public int iterationsCounter = 0;
 
     // Limiet van het aantal iteraties van de Hill Climber
-    public static int iterationsLimit = 100;
+    public static int iterationsLimit = 100000;
 
-    public int fileNumber = 4;
+    public int fileNumber = 1;
     public List<Integer> scores = new ArrayList<>();
 
     public static void main(String[] args) {
