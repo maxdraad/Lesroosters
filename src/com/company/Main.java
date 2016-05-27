@@ -63,7 +63,14 @@ public class Main {
         System.out.println(computeStudentConflicts() + " studenten zijn dubbel geroosterd!");
         System.out.println(computeCapacityConflicts() + " studenten passen niet in hun lokaal!");
 
-        for (Room room : rooms) System.out.println(room.name + "  " + room.nightSlot + " " + room.timetable);
+        for (Room room : rooms) {
+            for (int i=0; i<room.timetable.size(); i++) {
+                if (room.timetable.get(i) != null){
+                    System.out.println(room.timetable.get(i).course.name + " | " + room.timetable.get(i).activity +
+                            " | Lokaal: "+ room.name + " | Tijslot: " + i);
+                }
+            }
+        }
     }
 
     // Deze method leest alle vakken in
