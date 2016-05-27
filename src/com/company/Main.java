@@ -57,7 +57,7 @@ public class Main {
 
         hillClimber();
 
-        // Gegevens van het best gevonden rooster
+        // Gegevens van het beste gevonden rooster
         System.out.println("Score na " + iterationsLimit + " iteraties: " + computeScore());
         System.out.println("Nachtslot Maluspunten: " + computeNightslotPenalty());
         System.out.println(computeStudentConflicts() + " studenten zijn dubbel geroosterd!");
@@ -66,7 +66,7 @@ public class Main {
         for (Room room : rooms) System.out.println(room.name + "  " + room.nightSlot + " " + room.timetable);
     }
 
-    // Read all courses from file and define their features
+    // Deze method leest alle vakken in
     public void getCourses(){
         try {
             BufferedReader csvVakkenGegevens = new BufferedReader(new FileReader("resources/vakken_roostering.csv"));
@@ -94,7 +94,7 @@ public class Main {
         }
     }
 
-    // Read in all lecture rooms and their capacity
+    // Deze method leest alle zalen in en bepaald hun capaciteit
     public void getRooms(){
         try {
             BufferedReader csvZaalGegevens = new BufferedReader(new FileReader("resources/zalen_roostering.csv"));
@@ -130,7 +130,7 @@ public class Main {
 
     }
 
-    // Read in all students and define their features
+    // Deze method maakt alle studenten aan
     public void getStudents(){
         try {
             BufferedReader csvStudentGegevens = new BufferedReader(new FileReader("resources/studenten_roostering.csv"));
@@ -142,15 +142,12 @@ public class Main {
                 String lastName = gegevens.get(0);
                 String firstName = gegevens.get(1);
                 int studentNumber = Integer.parseInt(gegevens.get(2));
-
-                //Instantiation of variable with list of Course belonging to student
                 List<String> studentCourses = gegevens.subList(3, gegevens.size());
                 List<Activity> studentActivities = new ArrayList<>();
-
                 Student newStudent = new Student(lastName, firstName, studentNumber, studentCourses);
                 students.add(newStudent);
 
-                // Voegt student toe aan course
+                // Voeg student toe aan course
                 for (int i = 0; i < courses.size(); i++) {
                     Course course = courses.get(i);
                     if (studentCourses.contains(course.name)) {
@@ -164,9 +161,8 @@ public class Main {
         }
     }
 
+    //Deze method maakt alle types activities aan
     public void makeActivities(){
-        //For loop die activities aanmaakt
-        //Hier zouden we de eerste heuristieken kunnen toepassen
         for (Course course: courses) {
             activities.addAll(createActivity(course, course.numberLectures, 0, "Hoorcollege", true));
             activities.addAll(createActivity(course, course.numberWorkGroups, course.maxStudentsGroups, "Werkcollege", false));
@@ -213,8 +209,6 @@ public class Main {
     }
 
     public int computeScore(){
-    //public void computeScore(){
-
         int activityScore = computeActivityScore();
         int studentConflictCounter = computeStudentConflicts();
         int capacityConflictCounter = computeCapacityConflicts();
@@ -237,11 +231,9 @@ public class Main {
             }
         }
         if (activityCounter == activities.size()){
-            //System.out.println("1000 punten, alle activities ingeroosterd");
             return 1000;
         }
         else{
-            //System.out.println("0 punten, niet alle activities zijn ingeroosterd");
             return 0;
         }
     }
