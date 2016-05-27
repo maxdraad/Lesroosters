@@ -330,7 +330,7 @@ public class Main {
             int distributionBonus = computeDistributionBonus(course, workgroupWeeks);
             int factorMalus;
             int factorBonus;
-            switch (course.numberOfGroups){     //hardcoded
+            switch (course.numberOfGroups){
                 case 1:
                     factorMalus = 10;
                     factorBonus = 20;
