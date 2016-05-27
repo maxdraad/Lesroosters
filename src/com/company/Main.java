@@ -297,10 +297,9 @@ public class Main {
         return capacityConflictCounter;
     }
 
-    // Deze method checkt het gebruik van het nachtslot
+    // Deze method checkt het gebruik van het avondslot
     public int computeNightslotPenalty(){
         int nightSlotPenaltyCount = 0;
-        // Checkt gebruik van avondslot
         for (Room room: rooms){
             if (room.nightSlot){
                 for (int fromSlot = timeslots; fromSlot < timeslotsNight; fromSlot++){
